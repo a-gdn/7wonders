@@ -4,7 +4,9 @@ Example usage of the 7 Wonders Game Environment.
 This demonstrates how to use the GameEnv class for RL training.
 """
 
-from GameEnv import GameEnv, CardColor
+from seven_wonders.environment import GameEnv
+from seven_wonders.constants import CardColor
+from seven_wonders import scoring
 import random
 
 
@@ -42,7 +44,7 @@ def test_basic_game():
         print()
     
     # Game is over - calculate final scores
-    scores = env.calculate_scores()
+    scores = scoring.calculate_scores(env)
     print("\n" + "="*50)
     print("GAME OVER - FINAL SCORES")
     print("="*50)
