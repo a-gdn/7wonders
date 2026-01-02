@@ -33,9 +33,11 @@ venv/
 ENV/
 
 # Project Specific Exclusions
-db/             # Exclude your database folder
-*.keras         # Exclude Keras model files
-*.h5            # Exclude HDF5 (common Keras format)
+db
+db/
+**/db/*
+*.keras
+*.h5
 
 # IDEs
 .vscode/
