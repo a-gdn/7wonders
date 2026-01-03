@@ -39,7 +39,7 @@ def setup_decks(num_players: int, cards_data: List[Dict]) -> Dict[int, List[Card
     """Filter, create Card objects, and shuffle age decks."""
     decks = {1: [], 2: [], 3: []}
     for data in cards_data:
-        if data["player_requirement"] == num_players and data["color"] != "purple":
+        if data["player_requirement"] <= num_players and data["color"] != "purple":
             decks[data["age"]].append(create_card_from_data(data))
     
     # Handle Guilds (Purple) for Age III

@@ -44,7 +44,7 @@ def can_afford_resources(env, player, card_cost: Dict[str, int]) -> bool:
             
     return True
 
-def pay_resource_cost(env, player, resources_needed: Dict[str, int]):
+def pay_resource_cost(env, player, resources_needed: Dict[str, int], deferred_credits: Dict[int, int] = None):
     """
     Pay resource cost by using own resources and/or buying from neighbors.
     """
@@ -56,9 +56,9 @@ def pay_resource_cost(env, player, resources_needed: Dict[str, int]):
             resources_to_buy[resource] = needed - available_own
     
     if resources_to_buy:
-        buy_resources_from_neighbors(env, player, resources_to_buy)
+        buy_resources_from_neighbors(env, player, resources_to_buy, deferred_credits)
 
-def buy_resources_from_neighbors(env, player, resources_to_buy: Dict[str, int]):
+def buy_resources_from_neighbors(env, player, resources_to_buy: Dict[str, int], deferred_credits: Dict[int, int] = None):
     """
     Logic for purchasing resources from the left and right neighbors.
     """
@@ -78,7 +78,11 @@ def buy_resources_from_neighbors(env, player, resources_to_buy: Dict[str, int]):
                 
                 if can_buy > 0:
                     player.coins -= can_buy * cost_per_resource
-                    neighbor.coins += can_buy * cost_per_resource
+                    # Per rules: Coins earned via commerce are available NEXT turn.
+                    if deferred_credits is not None:
+                        deferred_credits[neighbor_id] = deferred_credits.get(neighbor_id, 0) + (can_buy * cost_per_resource)
+                    else:
+                        neighbor.coins += can_buy * cost_per_resource
                     quantity_needed -= can_buy
 
 def get_sellable_resources(env, player) -> Set[str]:

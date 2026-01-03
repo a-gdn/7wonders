@@ -34,13 +34,10 @@ def calculate_scores(env) -> Dict[int, int]:
         score += _calculate_science_score(player)
         
         # 6. Commercial structures (yellow)
-        score += _calculate_commercial_score(player)
+        score += _calculate_commercial_score(env, player)
         
         # 7. Guilds (purple)
         score += _calculate_guild_score(env, player)
-        
-        # 8. Dynamic Card Scoring (e.g., Age III scoring cards)
-        # score += calculate_card_scoring(player, None)
         
         scores[player.player_id] = score
     
@@ -64,13 +61,45 @@ def get_winner(env) -> int:
     
     return min(coin_winners)
 
-def calculate_card_scoring(player, effect) -> int:
+def calculate_variable_vp(env, player, effect) -> int:
     """
-    Calculate VP from complex scoring cards (typically Age III yellow/purple).
+    Calculate VP from variable scoring effects (vp_per_card, vp_per_wonder_stage).
+    Used for Commercial (Yellow) and Guild (Purple) cards.
     """
-    # TO DO
+    score = 0
     
-    return 0
+    # 1. VP per Card
+    if "vp_per_card" in effect:
+        vp_data = effect["vp_per_card"]
+        target_colors = vp_data.get("colors", [])
+        if "color" in vp_data:
+            target_colors.append(vp_data["color"])
+        
+        target_scope = vp_data.get("target", "own")
+        multiplier = vp_data.get("multiplier", 1)
+        
+        players_to_check = []
+        if "self" in target_scope or target_scope == "own" or target_scope == "neighbors_and_self":
+            players_to_check.append(player)
+        if "neighbors" in target_scope:
+            players_to_check.extend([env.players[pid] for pid in env._get_neighbors(player.player_id)])
+            
+        count = 0
+        for p in players_to_check:
+            for c in p.built_cards:
+                if c.color.value in target_colors:
+                    count += 1
+        score += count * multiplier
+
+    # 2. VP per Wonder Stage
+    if "vp_per_wonder_stage" in effect:
+        vp_data = effect["vp_per_wonder_stage"]
+        # Usually targets own wonder, but Builders Guild targets neighbors too
+        # Assuming logic similar to above if target exists, else default to own
+        multiplier = vp_data.get("multiplier", 1)
+        score += player.current_wonder_stage * multiplier
+        
+    return score
 
 def _calculate_science_score(player) -> int:
     """Calculates science VP: (sets of 3 = 7pts) + (identical symbols^2)."""
@@ -83,33 +112,29 @@ def _calculate_science_score(player) -> int:
         
     return score
 
-def _calculate_commercial_score(player) -> int:
+def _calculate_commercial_score(env, player) -> int:
     """Yellow card scoring logic."""
     score = 0
     for card in player.built_cards:
         if card.color == CardColor.YELLOW:
             effect = card.effect
+            # Static VP
             if "vp" in effect:
                 score += effect["vp"]
-            # Wonder-based scoring (e.g. Arena)
-            if "vp_per_wonder_stage" in effect:
-                mult = effect["vp_per_wonder_stage"].get("multiplier", 1)
-                score += player.current_wonder_stage * mult
+            # Variable VP (e.g. Chamber of Commerce, Arena)
+            score += calculate_variable_vp(env, player, effect)
     return score
 
 def _calculate_guild_score(env, player) -> int:
     """Purple card scoring logic based on neighbors."""
     score = 0
-    neighbors = env._get_neighbors(player.player_id)
     
     for card in player.built_cards:
         if card.color == CardColor.PURPLE:
             effect = card.effect
-            # Check neighbor collections for specific colors
-            if "vp_per_card" in effect and effect.get("target") == "neighbors":
-                color = effect["vp_per_card"].get("color")
-                multiplier = effect["vp_per_card"].get("multiplier", 1)
-                for n_id in neighbors:
-                    count = sum(1 for c in env.players[n_id].built_cards if c.color.value == color)
-                    score += count * multiplier
+            # Static VP
+            if "vp" in effect:
+                score += effect["vp"]
+            # Variable VP (e.g. Spies Guild, Builders Guild)
+            score += calculate_variable_vp(env, player, effect)
     return score

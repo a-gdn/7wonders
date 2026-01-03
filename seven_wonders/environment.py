@@ -57,6 +57,7 @@ class GameEnv:
         
         # Track cards selected this turn (by all players simultaneously)
         self.selected_cards: Dict[int, Optional[Card]] = {i: None for i in range(num_players)}
+        self.selected_action_types: Dict[int, str] = {i: "discard" for i in range(num_players)}
     
     def reset(self) -> Dict:
         """
@@ -77,6 +78,7 @@ class GameEnv:
         self.current_turn = 0
         self.discard_pile = []
         self.selected_cards = {i: None for i in range(self.num_players)}
+        self.selected_action_types = {i: "discard" for i in range(self.num_players)}
         
         # Deal initial hands for Age I
         setup.deal_age_hand(self.players, self.decks, 0)
@@ -149,15 +151,34 @@ class GameEnv:
             player = self.players[player_id]
             hand = player.current_hand
             
+            # Parse action intent and target card
+            intent = "build_structure"
+            target_name = action
+            
+            if action == "discard":
+                intent = "discard"
+                target_name = None # Will pick first available
+            elif action.startswith("discard_"):
+                intent = "discard"
+                target_name = action.replace("discard_", "")
+            elif action.startswith("wonder_stage_"):
+                intent = "build_wonder"
+                target_name = action.replace("wonder_stage_", "")
+            
             # Find and select the card
             selected_card = None
             for card in hand:
-                if card.name == action or action == "discard":
+                if target_name and card.name == target_name:
+                    selected_card = card
+                    break
+                elif not target_name and intent == "discard":
+                    # Fallback for generic discard: pick first card
                     selected_card = card
                     break
             
             if selected_card:
                 self.selected_cards[player_id] = selected_card
+                self.selected_action_types[player_id] = intent
                 player.current_hand.remove(selected_card)
                 
                 # On turn 6 (final turn): discard remaining card without coins
@@ -168,6 +189,7 @@ class GameEnv:
                 # If action is invalid, discard
                 if hand:
                     self.selected_cards[player_id] = hand[0]
+                    self.selected_action_types[player_id] = "discard"
                     player.current_hand.pop(0)
                     
                     # On turn 6: discard remaining card without coins
@@ -183,23 +205,40 @@ class GameEnv:
             Rewards for each player (empty dict for now, calculated at end of game)
         """
         rewards = {i: 0.0 for i in range(self.num_players)}
+        deferred_credits = {}  # Map player_id -> amount (Commerce income available next turn)
+        
+        # Pass 1: Determine valid actions for all players based on START of turn state
+        actions_to_execute = []
         
         for player_id, card in self.selected_cards.items():
             if card is None:
                 continue
             
             player = self.players[player_id]
+            intent = self.selected_action_types.get(player_id, "discard")
             
-            # Action 1: Try to build the structure
-            if self._can_build_structure(player, card):
-                self._build_structure(player, card)
-            # Action 2: Try to build a wonder stage
-            elif self._can_build_wonder_stage(player, card):
-                self._build_wonder_stage(player, card)
-            # Action 3: Forced or chosen discard
+            # Execute based on intent, with fallbacks to discard if impossible
+            if intent == "build_structure" and self._can_build_structure(player, card):
+                actions_to_execute.append((player, "build_structure", card))
+            elif intent == "build_wonder" and self._can_build_wonder_stage(player, card):
+                actions_to_execute.append((player, "build_wonder", card))
+            else:
+                # Intent was discard OR build failed
+                actions_to_execute.append((player, "discard", card))
+        
+        # Pass 2: Execute actions (using deferred credits for commerce)
+        for player, action_type, card in actions_to_execute:
+            if action_type == "build_structure":
+                self._build_structure(player, card, deferred_credits)
+            elif action_type == "build_wonder":
+                self._build_wonder_stage(player, card, deferred_credits)
             else:
                 self._discard_card(player, card)
         
+        # Pass 3: Distribute commerce income
+        for player_id, amount in deferred_credits.items():
+            self.players[player_id].coins += amount
+            
         return rewards
     
     def _can_build_structure(self, player: PlayerCity, card: Card) -> bool:
@@ -215,7 +254,7 @@ class GameEnv:
         # Check resource cost
         return resource_manager.can_afford_resources(self, player, card.cost)
     
-    def _build_structure(self, player: PlayerCity, card: Card):
+    def _build_structure(self, player: PlayerCity, card: Card, deferred_credits: Dict[int, int] = None):
         """Build a structure for the player."""
         # Check if this is a free construction via chain
         is_free = resource_manager.has_chain_prerequisite(player, card)
@@ -231,7 +270,7 @@ class GameEnv:
             # For resources: resources are NOT spent, but must be paid for if buying from neighbors
             resources_needed = {k: v for k, v in cost.items() if k != "coins"}
             if resources_needed:
-                resource_manager.pay_resource_cost(self, player, resources_needed)
+                resource_manager.pay_resource_cost(self, player, resources_needed, deferred_credits)
         
         # Add card to built cards
         player.built_cards.append(card)
@@ -279,15 +318,8 @@ class GameEnv:
             # Stored for later use
             pass
         
-        if "vp_per_card" in effect:
-            # Scoring cards - calculate VP
-            vp = scoring.calculate_card_scoring(player, effect["vp_per_card"])
-            player.total_vp_from_cards += vp
-        
-        if "vp_per_wonder_stage" in effect:
-            # Arène: 1 VP per wonder stage
-            vp = player.current_wonder_stage * effect["vp_per_wonder_stage"].get("multiplier", 1)
-            player.total_vp_from_cards += vp
+        # Note: Variable VP effects (vp_per_card, vp_per_wonder_stage) are 
+        # calculated at the end of the game in scoring.py, not here.
     
     def _calculate_immediate_coins(self, player: PlayerCity, effect: Dict) -> int:
         """Calculate coins earned immediately (e.g., from Vineyard)."""
@@ -363,7 +395,7 @@ class GameEnv:
         
         return True
     
-    def _build_wonder_stage(self, player: PlayerCity, card: Card):
+    def _build_wonder_stage(self, player: PlayerCity, card: Card, deferred_credits: Dict[int, int] = None):
         """Build a wonder stage using the selected card as marker."""
         stage = player.wonder_stages[player.current_wonder_stage]
         
@@ -375,7 +407,7 @@ class GameEnv:
         # Pay resource costs by buying from neighbors if needed (resources are NOT spent)
         resources_needed = {k: v for k, v in cost.items() if k != "coins"}
         if resources_needed:
-            resource_manager.pay_resource_cost(self, player, resources_needed)
+            resource_manager.pay_resource_cost(self, player, resources_needed, deferred_credits)
 
         # Mark stage as built
         stage.built = True
@@ -384,8 +416,8 @@ class GameEnv:
         # Apply stage effects
         self._apply_wonder_stage_effects(player, stage)
         
-        # The card used as marker goes to discard (hidden)
-        self.discard_pile.append(card)
+        # The card used as marker is hidden under the board.
+        # It does NOT go to the discard pile (which is for 3-coin discards).
     
     def _apply_wonder_stage_effects(self, player: PlayerCity, stage: WonderStage):
         """Apply effects from completing a wonder stage."""
@@ -493,6 +525,7 @@ class GameEnv:
             "current_age": self.current_age,
             "current_turn": self.current_turn,
             "num_players": self.num_players,
+            "discard_pile": [c.name for c in self.discard_pile],
             "players": []
         }
         
@@ -500,6 +533,8 @@ class GameEnv:
             player_obs = {
                 "player_id": player.player_id,
                 "coins": player.coins,
+                "wonder_name": player.wonder_name,
+                "wonder_side": player.wonder_side,
                 "production": dict(player.production),
                 "science": dict(player.science),
                 "military_shields": player.military_shields,
@@ -507,6 +542,7 @@ class GameEnv:
                 "max_wonder_stages": len(player.wonder_stages),
                 "cards_played": len(player.built_cards),
                 "current_hand_size": len(player.current_hand),
+                "current_hand": [c.name for c in player.current_hand],
                 "military_tokens_score": sum(player.military_tokens),
                 "built_card_names": list(player.built_card_names)
             }
@@ -526,7 +562,7 @@ class GameEnv:
         
         for card in player.current_hand:
             # Can always choose to discard
-            legal_actions.append("discard")
+            legal_actions.append(f"discard_{card.name}")
             
             # Can build if conditions are met
             if self._can_build_structure(player, card):
@@ -537,7 +573,7 @@ class GameEnv:
                 legal_actions.append(f"wonder_stage_{card.name}")
         
         # Always have discard as fallback
-        if "discard" not in legal_actions:
+        if not legal_actions:
             legal_actions.append("discard")
         
         return list(set(legal_actions))  # Remove duplicates
