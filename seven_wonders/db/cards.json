@@ -1359,6 +1359,10 @@
     "color": "purple",
     "cost": { "wood": 3, "glass": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": [{ "type": "vp_per_set", "colors": ["brown", "grey", "purple"], "multiplier": 1 }]
+    "effect": [
+      { "type": "vp_per_card", "color": "brown", "target": "self", "multiplier": 1 },
+      { "type": "vp_per_card", "color": "grey", "target": "self", "multiplier": 1 },
+      { "type": "vp_per_card", "color": "purple", "target": "self", "multiplier": 1 }
+    ]
   }
 ]
