@@ -1,0 +1,277 @@
+[
+  {
+    "name": "Alexandrie",
+    "start_resource": "glass",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "stone": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 2 },
+          "effect": { "production": { "options": ["wood", "stone", "ore", "clay"], "choice_count": 1 } }
+        },
+        {
+          "stage": 3,
+          "cost": { "papyrus": 1, "textile": 1 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "clay": 2 },
+          "effect": { "production": { "options": ["wood", "stone", "ore", "clay"], "choice_count": 1 } }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 3 },
+          "effect": { "production": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+        },
+        {
+          "stage": 3,
+          "cost": { "wood": 4 },
+          "effect": { "vp": 7 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Babylon",
+    "start_resource": "wood",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "clay": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 2, "textile": 1 },
+          "effect": { "science_wildcard": ["compass", "tablet", "gear"] }
+        },
+        {
+          "stage": 3,
+          "cost": { "wood": 4 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "stone": 2 },
+          "effect": { "action": "play_7th_card" }
+        },
+        {
+          "stage": 2,
+          "cost": { "clay": 3, "glass": 1 },
+          "effect": { "science_wildcard": ["compass", "tablet", "gear"] }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Éphesos",
+    "start_resource": "papyrus",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "clay": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "wood": 2 },
+          "effect": { "coins": 9 }
+        },
+        {
+          "stage": 3,
+          "cost": { "ore": 2, "glass": 1 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "stone": 2 },
+          "effect": { "vp": 2, "coins": 4 }
+        },
+        {
+          "stage": 2,
+          "cost": { "wood": 2 },
+          "effect": { "vp": 3, "coins": 4 }
+        },
+        {
+          "stage": 3,
+          "cost": { "ore": 2, "textile": 1 },
+          "effect": { "vp": 5, "coins": 4 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Gizeh",
+    "start_resource": "stone",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "wood": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "clay": 2, "textile": 1 },
+          "effect": { "vp": 5 }
+        },
+        {
+          "stage": 3,
+          "cost": { "stone": 4 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "wood": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "stone": 3 },
+          "effect": { "vp": 5 }
+        },
+        {
+          "stage": 3,
+          "cost": { "clay": 3 },
+          "effect": { "vp": 5 }
+        },
+        {
+          "stage": 4,
+          "cost": { "stone": 4, "papyrus": 1 },
+          "effect": { "vp": 7 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Halikarnassos",
+    "start_resource": "textile",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "ore": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "glass": 1, "papyrus": 1 },
+          "effect": { "action": "play_from_discard" }
+        },
+        {
+          "stage": 3,
+          "cost": { "stone": 3 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "clay": 2 },
+          "effect": { "vp": 2, "action": "play_from_discard" }
+        },
+        {
+          "stage": 2,
+          "cost": { "glass": 1, "papyrus": 1 },
+          "effect": { "vp": 1, "action": "play_from_discard" }
+        },
+        {
+          "stage": 3,
+          "cost": { "wood": 3 },
+          "effect": { "action": "play_from_discard" }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Olympe",
+    "start_resource": "clay",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "stone": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "wood": 2 },
+          "effect": { "action": "free_build_first_color_of_age" }
+        },
+        {
+          "stage": 3,
+          "cost": { "clay": 3 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "ore": 2 },
+          "effect": { "vp": 2, "action": "free_build_first_card_of_age" }
+        },
+        {
+          "stage": 2,
+          "cost": { "clay": 3 },
+          "effect": { "vp": 3, "action": "free_build_last_card_of_age" }
+        },
+        {
+          "stage": 3,
+          "cost": { "glass": 1, "papyrus": 1, "textile": 1 },
+          "effect": { "vp": 5 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Rhodos",
+    "start_resource": "ore",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "wood": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "clay": 3 },
+          "effect": { "military": 2 }
+        },
+        {
+          "stage": 3,
+          "cost": { "ore": 4 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "stone": 3 },
+          "effect": { "vp": 3, "coins": 3, "military": 1 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 4 },
+          "effect": { "vp": 4, "coins": 4, "military": 1 }
+        }
+      ]
+    }
+  }
+]

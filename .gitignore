@@ -33,9 +33,6 @@ venv/
 ENV/
 
 # Project Specific Exclusions
-db
-db/
-**/db/*
 *.keras
 *.h5
 

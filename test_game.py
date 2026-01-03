@@ -129,8 +129,118 @@ def test_rl_integration():
     print(f"Action space size: {len(set(legal_actions))}")
 
 
+def _get_colored_text(text, color_name):
+    """Apply ANSI color to text based on card color name."""
+    colors = {
+        "brown": "\033[38;5;94m",   # Brown (Raw Materials)
+        "grey": "\033[90m",         # Grey (Manufactured Goods)
+        "gray": "\033[90m",
+        "blue": "\033[94m",         # Blue (Civilian)
+        "green": "\033[92m",        # Green (Science)
+        "yellow": "\033[93m",       # Yellow (Commercial)
+        "red": "\033[91m",          # Red (Military)
+        "purple": "\033[95m",       # Purple (Guilds)
+    }
+    code = colors.get(str(color_name).lower(), "\033[0m")
+    return f"{code}{text}\033[0m"
+
+
+def play_human_vs_bots():
+    """Play a game interactively as Player 0 against random bots."""
+    print("Starting Interactive 7 Wonders Game")
+    print("You are Player 0.")
+    
+    num_players = 3
+    env = GameEnv(num_players=num_players)
+    
+    # Build card color map
+    card_colors = {}
+    if hasattr(env, "cards_data"):
+        for card in env.cards_data:
+            card_colors[card["name"]] = card["color"]
+
+    obs = env.reset()
+    
+    while not env.is_done():
+        print(f"\n{'='*20} AGE {obs['current_age'] + 1} - TURN {obs['current_turn'] + 1} {'='*20}")
+        
+        # Display all players info
+        for pid in range(num_players):
+            p_obs = obs["players"][pid]
+            p_obj = env.players[pid]
+            wonder_side = p_obs.get("wonder_side", "day")
+            
+            role = "You" if pid == 0 else f"Bot {pid + 1}"
+            print(f"\n--- Player {pid + 1} ({role}) ---")
+            print(f"Wonder: {p_obj.wonder_name} ({wonder_side}) (Stage {p_obs['wonder_stage_progress']})")
+            print(f"Coins: {p_obs['coins']} | Shields: {p_obs['military_shields']}")
+            print(f"Resources: {p_obs['production']}")
+            print(f"Science: {p_obs['science']}")
+            print(f"Built Cards: {p_obs['built_card_names']}")
+            print(f"Hand: {p_obs['current_hand']}")
+
+        actions = {}
+        
+        # Human Player (Player 0)
+        legal_actions = env.get_legal_actions(0)
+        legal_actions.sort()
+        
+        print(f"\n--- Your Turn (Player 1) ---")
+        print("Available Actions:")
+        for i, act in enumerate(legal_actions):
+            if act.startswith("discard_"):
+                c_name = act.replace("discard_", "")
+            elif act.startswith("wonder_stage_"):
+                c_name = act.replace("wonder_stage_", "")
+            else:
+                c_name = act
+            
+            color_name = card_colors.get(c_name, "default")
+            print(f"  {i}: {_get_colored_text(act, color_name)}")
+        
+        valid = False
+        while not valid:
+            try:
+                choice = input("\nEnter action index: ")
+                idx = int(choice)
+                if 0 <= idx < len(legal_actions):
+                    actions[0] = legal_actions[idx]
+                    valid = True
+                else:
+                    print("Invalid index. Try again.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+        # Bot Players
+        for pid in range(1, num_players):
+            bot_legal = env.get_legal_actions(pid)
+            actions[pid] = random.choice(bot_legal)
+        
+        # Step
+        obs, rewards, done, info = env.step(actions)
+        
+        print("\nActions taken:")
+        for pid, act in actions.items():
+            player_type = "You" if pid == 0 else f"Bot {pid + 1}"
+            print(f"  {player_type}: {act}")
+
+    # Game Over
+    print("\n" + "="*50)
+    print("GAME OVER")
+    scores = scoring.calculate_scores(env)
+    for pid in range(num_players):
+        print(f"Player {pid + 1}: {scores[pid]} points")
+        
+    winner = max(scores, key=scores.get)
+    if winner == 0:
+        print("\n🏆 You Won! (Player 1)")
+    else:
+        print(f"\nPlayer {winner + 1} Won. Better luck next time!")
+
+
 if __name__ == "__main__":
     # Run tests
-    test_basic_game()
-    test_game_mechanics()
-    test_rl_integration()
+    # test_basic_game()
+    # test_game_mechanics()
+    # test_rl_integration()
+    play_human_vs_bots()

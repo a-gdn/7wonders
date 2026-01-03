@@ -1,0 +1,1334 @@
+[
+  {
+    "name": "Chantier",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "wood": 1 } }
+  },
+  {
+    "name": "Chantier",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "wood": 1 } }
+  },
+  {
+    "name": "Cavité",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "stone": 1 } }
+  },
+  {
+    "name": "Cavité",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "stone": 1 } }
+  },
+  {
+    "name": "Bassin argileux",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "clay": 1 } }
+  },
+  {
+    "name": "Bassin argileux",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "clay": 1 } }
+  },
+  {
+    "name": "Filon",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "ore": 1 } }
+  },
+  {
+    "name": "Filon",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "ore": 1 } }
+  },
+  {
+    "name": "Friche",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["clay", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Excavation",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["clay", "stone"], "choice_count": 1 } }
+  },
+  {
+    "name": "Fosse argileuse",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["clay", "ore"], "choice_count": 1 } }
+  },
+  {
+    "name": "Exploitation forestière",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["stone", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Gisement",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["ore", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Mine",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production_choice": { "options": ["ore", "stone"], "choice_count": 1 } }
+  },
+  {
+    "name": "Verrerie",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "glass": 1 } }
+  },
+  {
+    "name": "Verrerie",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "glass": 1 } }
+  },
+  {
+    "name": "Verrerie",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "glass": 1 } }
+  },
+  {
+    "name": "Verrerie",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "glass": 1 } }
+  },
+  {
+    "name": "Presse",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "papyrus": 1 } }
+  },
+  {
+    "name": "Presse",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "papyrus": 1 } }
+  },
+  {
+    "name": "Presse",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "papyrus": 1 } }
+  },
+  {
+    "name": "Presse",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "papyrus": 1 } }
+  },
+  {
+    "name": "Métier à tisser",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "textile": 1 } }
+  },
+  {
+    "name": "Métier à tisser",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "textile": 1 } }
+  },
+  {
+    "name": "Métier à tisser",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "textile": 1 } }
+  },
+  {
+    "name": "Métier à tisser",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "grey",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "production": { "textile": 1 } }
+  },
+  {
+    "name": "Puits",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Puits",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Bains",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "stone": 1 },
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Bains",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "blue",
+    "cost": { "stone": 1 },
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Autel",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Autel",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Théâtre",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Théâtre",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "blue",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 3 }
+  },
+  {
+    "name": "Taverne",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "coins": 5 }
+  },
+  {
+    "name": "Taverne",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "coins": 5 }
+  },
+  {
+    "name": "Taverne",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_coins": 5 }
+  },
+  {
+    "name": "Comptoir est",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+  },
+  {
+    "name": "Comptoir est",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+  },
+  {
+    "name": "Comptoir ouest",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+  },
+  {
+    "name": "Comptoir ouest",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+  },
+  {
+    "name": "Marché",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }
+  },
+  {
+    "name": "Marché",
+    "age": 1,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }
+  },
+  {
+    "name": "Palissade",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "wood": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Palissade",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "red",
+    "cost": { "wood": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Caserne",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "ore": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Caserne",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "red",
+    "cost": { "ore": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Tour de garde",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "clay": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Tour de garde",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "red",
+    "cost": { "clay": 1 },
+    "chain_from": null,
+    "effect": { "military": 1 }
+  },
+  {
+    "name": "Officine",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "textile": 1 },
+    "chain_from": null,
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Officine",
+    "age": 1,
+    "player_requirement": 5,
+    "color": "green",
+    "cost": { "textile": 1 },
+    "chain_from": null,
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Atelier",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "glass": 1 },
+    "chain_from": null,
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Atelier",
+    "age": 1,
+    "player_requirement": 7,
+    "color": "green",
+    "cost": { "glass": 1 },
+    "chain_from": null,
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Scriptorium",
+    "age": 1,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Scriptorium",
+    "age": 1,
+    "player_requirement": 4,
+    "color": "green",
+    "cost": { "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Scierie",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "wood": 2 } }
+  },
+  {
+    "name": "Scierie",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "wood": 2 } }
+  },
+  {
+    "name": "Carrière",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "stone": 2 } }
+  },
+  {
+    "name": "Carrière",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "stone": 2 } }
+  },
+  {
+    "name": "Briqueterie",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "clay": 2 } }
+  },
+  {
+    "name": "Briqueterie",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "clay": 2 } }
+  },
+  {
+    "name": "Fonderie",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "ore": 2 } }
+  },
+  {
+    "name": "Fonderie",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "brown",
+    "cost": { "coins": 1 },
+    "chain_from": null,
+    "effect": { "production": { "ore": 2 } }
+  },
+  {
+    "name": "Aqueduc",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "stone": 3 },
+    "chain_from": "Bains",
+    "effect": { "vp": 5 }
+  },
+  {
+    "name": "Aqueduc",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "blue",
+    "cost": { "stone": 3 },
+    "chain_from": "Bains",
+    "effect": { "vp": 5 }
+  },
+  {
+    "name": "Temple",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "clay": 1, "wood": 1, "glass": 1 },
+    "chain_from": "Autel",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Temple",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "blue",
+    "cost": { "clay": 1, "wood": 1, "glass": 1 },
+    "chain_from": "Autel",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Statue",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "ore": 2, "wood": 1 },
+    "chain_from": "Puits",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Statue",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "blue",
+    "cost": { "ore": 2, "wood": 1 },
+    "chain_from": "Puits",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Tribunal",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "clay": 2, "textile": 1 },
+    "chain_from": "Scriptorium",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Tribunal",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "blue",
+    "cost": { "clay": 2, "textile": 1 },
+    "chain_from": "Scriptorium",
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Forum",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": { "clay": 2 },
+    "chain_from": ["Comptoir est", "Comptoir ouest"],
+    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+  },
+  {
+    "name": "Forum",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": { "clay": 2 },
+    "chain_from": ["Comptoir est", "Comptoir ouest"],
+    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+  },
+  {
+    "name": "Forum",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": { "clay": 2 },
+    "chain_from": ["Comptoir est", "Comptoir ouest"],
+    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+  },
+  {
+    "name": "Caravanesérail",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": { "wood": 2 },
+    "chain_from": "Marché",
+    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Caravanesérail",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "yellow",
+    "cost": { "wood": 2 },
+    "chain_from": "Marché",
+    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Caravanesérail",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": { "wood": 2 },
+    "chain_from": "Marché",
+    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+  },
+  {
+    "name": "Vignoble",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }
+  },
+  {
+    "name": "Vignoble",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }
+  },
+  {
+    "name": "Bazar",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }
+  },
+  {
+    "name": "Bazar",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }
+  },
+  {
+    "name": "Muraille",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "stone": 3 },
+    "chain_from": null,
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Muraille",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "red",
+    "cost": { "stone": 3 },
+    "chain_from": null,
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Place d'armes",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "red",
+    "cost": { "ore": 2, "wood": 1 },
+    "chain_from": null,
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Place d'armes",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "red",
+    "cost": { "ore": 2, "wood": 1 },
+    "chain_from": null,
+    "effect": { "military": 2 }
+  },
+  {
+    "name": " Place d'armes",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "red",
+    "cost": { "ore": 2, "wood": 1 },
+    "chain_from": null,
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Ecuries",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "ore": 1, "clay": 1, "wood": 1 },
+    "chain_from": "Officine",
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Ecuries",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "red",
+    "cost": { "ore": 1, "clay": 1, "wood": 1 },
+    "chain_from": "Officine",
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Champs de tir",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "wood": 2, "ore": 1 },
+    "chain_from": "Atelier",
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Champs de tir",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "red",
+    "cost": { "wood": 2, "ore": 1 },
+    "chain_from": "Atelier",
+    "effect": { "military": 2 }
+  },
+  {
+    "name": "Laboratoire",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "clay": 2, "papyrus": 1 },
+    "chain_from": "Atelier",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Laboratoire",
+    "age": 2,
+    "player_requirement": 5,
+    "color": "green",
+    "cost": { "clay": 2, "papyrus": 1 },
+    "chain_from": "Atelier",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Dispensaire",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "ore": 2, "glass": 1 },
+    "chain_from": "Officine",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Dispensaire",
+    "age": 2,
+    "player_requirement": 4,
+    "color": "green",
+    "cost": { "ore": 2, "glass": 1 },
+    "chain_from": "Officine",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Bibliothèque",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "stone": 2, "textile": 1 },
+    "chain_from": "Scriptorium",
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Bibliothèque",
+    "age": 2,
+    "player_requirement": 6,
+    "color": "green",
+    "cost": { "stone": 2, "textile": 1 },
+    "chain_from": "Scriptorium",
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Ecole",
+    "age": 2,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "wood": 1, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Ecole",
+    "age": 2,
+    "player_requirement": 7,
+    "color": "green",
+    "cost": { "wood": 1, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Palace",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "stone": 1, "ore": 1, "wood": 1, "clay": 1, "glass": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "vp": 8 }
+  },
+  {
+    "name": "Palace",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "blue",
+    "cost": { "stone": 1, "ore": 1, "wood": 1, "clay": 1, "glass": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "vp": 8 }
+  },
+  {
+    "name": "Hôtels de ville",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "stone": 3, "glass": 1 },
+    "chain_from": null,
+    "effect": { "vp": 6 }
+  },
+  {
+    "name": "Hôtels de ville",
+    "age": 3,
+    "player_requirement": 6,
+    "color": "blue",
+    "cost": { "stone": 3, "glass": 1 },
+    "chain_from": null,
+    "effect": { "vp": 6 }
+  },
+  {
+    "name": "Sénat",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "wood": 2, "stone": 1, "ore": 1 },
+    "chain_from": "Bibliothèque",
+    "effect": { "vp": 6 }
+  },
+  {
+    "name": "Sénat",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "blue",
+    "cost": { "wood": 2, "stone": 1, "ore": 1 },
+    "chain_from": "Bibliothèque",
+    "effect": { "vp": 6 }
+  },
+  {
+    "name": "Panthéon",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "clay": 2, "ore": 1, "glass": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": "Autel",
+    "effect": { "vp": 7 }
+  },
+  {
+    "name": "Panthéon",
+    "age": 3,
+    "player_requirement": 6,
+    "color": "blue",
+    "cost": { "clay": 2, "ore": 1, "glass": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": "Autel",
+    "effect": { "vp": 7 }
+  },
+  {
+    "name": "Jardins",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "blue",
+    "cost": { "clay": 2, "wood": 1 },
+    "chain_from": "Théâtre",
+    "effect": { "vp": 5 }
+  },
+  {
+    "name": "Jardins",
+    "age": 3,
+    "player_requirement": 4,
+    "color": "blue",
+    "cost": { "clay": 2, "wood": 1 },
+    "chain_from": "Théâtre",
+    "effect": { "vp": 5 }
+  },
+  {
+    "name": "Phare",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": { "stone": 1, "glass": 1 },
+    "chain_from": "Caravanesérail",
+    "effect": { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 } }
+  },
+  {
+    "name": "Phare",
+    "age": 3,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": { "stone": 1, "glass": 1 },
+    "chain_from": "Caravanesérail",
+    "effect": { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 } }
+  },
+  {
+    "name": "Port",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": { "wood": 1, "ore": 1, "textile": 1 },
+    "chain_from": "Forum",
+    "effect": { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 }}
+  },
+  {
+    "name": "Port",
+    "age": 3,
+    "player_requirement": 4,
+    "color": "yellow",
+    "cost": { "wood": 1, "ore": 1, "textile": 1 },
+    "chain_from": "Forum",
+    "effect": { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 } }
+  },
+  {
+    "name": "Chambre de commerce",
+    "age": 3,
+    "player_requirement": 4,
+    "color": "yellow",
+    "cost": { "clay": 2, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+  },
+  {
+    "name": "Chambre de commerce",
+    "age": 3,
+    "player_requirement": 6,
+    "color": "yellow",
+    "cost": { "clay": 2, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+  },
+  {
+    "name": "Ludus",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "yellow",
+    "cost": { "stone": 1, "ore": 1 },
+    "chain_from": null,
+    "effect": { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+  },
+  {
+    "name": "Ludus",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "yellow",
+    "cost": { "stone": 1, "ore": 1 },
+    "chain_from": null,
+    "effect": { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+  },
+  {
+    "name": "Arène",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "yellow",
+    "cost": { "clay": 2, "ore": 1 },
+    "chain_from": "Dispensaire",
+    "effect": { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+  },
+  {
+    "name": "Arène",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "yellow",
+    "cost": { "clay": 2, "ore": 1 },
+    "chain_from": "Dispensaire",
+    "effect": { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+  },
+  {
+    "name": "Loge",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "clay": 2, "textile": 1, "papyrus": 1 },
+    "chain_from": "Dispensaire",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Loge",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "green",
+    "cost": { "clay": 2, "textile": 1, "papyrus": 1 },
+    "chain_from": "Dispensaire",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Académie",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "stone": 3, "glass": 1 },
+    "chain_from": "Ecole",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Académie",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "green",
+    "cost": { "stone": 3, "glass": 1 },
+    "chain_from": "Ecole",
+    "effect": { "science": "compass" }
+  },
+  {
+    "name": "Etude",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "wood": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": "Ecole",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Etude",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "green",
+    "cost": { "wood": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": "Ecole",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Observatoire",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "ore": 2, "glass": 1, "textile": 1 },
+    "chain_from": "Laboratoire",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Observatoire",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "green",
+    "cost": { "ore": 2, "glass": 1, "textile": 1 },
+    "chain_from": "Laboratoire",
+    "effect": { "science": "gear" }
+  },
+  {
+    "name": "Université",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "green",
+    "cost": { "wood": 2, "glass": 1, "papyrus": 1 },
+    "chain_from": "Bibliothèque",
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Université",
+    "age": 3,
+    "player_requirement": 4,
+    "color": "green",
+    "cost": { "wood": 2, "glass": 1, "papyrus": 1 },
+    "chain_from": "Bibliothèque",
+    "effect": { "science": "tablet" }
+  },
+  {
+    "name": "Castrum",
+    "age": 4,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Castrum",
+    "age": 4,
+    "player_requirement": 7,
+    "color": "red",
+    "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Fortifications",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "ore": 3, "stone": 1 },
+    "chain_from": "Muraille",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Fortifications",
+    "age": 3,
+    "player_requirement": 7,
+    "color": "red",
+    "cost": { "ore": 3, "stone": 1 },
+    "chain_from": "Muraille",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Arsenal",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "wood": 2, "ore": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Arsenal",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "red",
+    "cost": { "wood": 2, "ore": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Atelier de siège",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "red",
+    "cost": { "wood": 1, "clay": 3 },
+    "chain_from": "Laboratoire",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Atelier de siège",
+    "age": 3,
+    "player_requirement": 5,
+    "color": "red",
+    "cost": { "wood": 1, "clay": 3 },
+    "chain_from": "Laboratoire",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Cirque",
+    "age": 3,
+    "player_requirement": 4,
+    "color": "red",
+    "cost": { "clay": 2, "ore": 1},
+    "chain_from": "Place d'armes",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Cirque",
+    "age": 3,
+    "player_requirement": 6,
+    "color": "red",
+    "cost": { "clay": 2, "ore": 1},
+    "chain_from": "Place d'armes",
+    "effect": { "military": 3 }
+  },
+  {
+    "name": "Guilde des travailleurs",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "ore": 2, "wood": 1, "stone": 1, "clay": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "brown", "target": "neighbors", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des artisans",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "stone": 2, "ore": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "grey", "target": "neighbors", "multiplier": 2 }
+  },
+  {
+    "name": "Guilde des magistrats",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "wood": 3, "stone": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "blue", "target": "neighbors", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des commerçants",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "glass": 1, "papyrus": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "yellow", "target": "neighbors", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des bâtisseurs",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "stone": 3, "clay": 2, "glass": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_wonder_stage", "target": "neighbors_and_self", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des espions",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "clay": 2, "glass": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "red", "target": "neighbors", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des philosophes",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "clay": 3, "papyrus": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_card", "color": "green", "target": "neighbors", "multiplier": 1 }
+  },
+  {
+    "name": "Guilde des décorateurs",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "ore": 2, "stone": 1, "textile": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_all_wonder_stages", "value": 7 }
+  },
+  {
+    "name": "Guilde des scientifiques",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "wood": 2, "ore": 2, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "science_wildcard": ["compass", "tablet", "gear"] }
+  },
+  {
+    "name": "Guilde des armateurs",
+    "age": 3,
+    "player_requirement": 3,
+    "color": "purple",
+    "cost": { "wood": 3, "glass": 1, "papyrus": 1 },
+    "chain_from": null,
+    "effect": { "type": "vp_per_set", "colors": ["brown", "grey", "purple"], "multiplier": 1 }
+  }
+]

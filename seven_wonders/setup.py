@@ -37,20 +37,49 @@ def setup_players(num_players: int, wonder_data: List[Dict]) -> List[PlayerCity]
 
 def setup_decks(num_players: int, cards_data: List[Dict]) -> Dict[int, List[Card]]:
     """Filter, create Card objects, and shuffle age decks."""
-    decks = {1: [], 2: [], 3: []}
+    # Separate candidates by age/type
+    candidates = {1: [], 2: [], 3: []}
+    guild_candidates = []
+
     for data in cards_data:
-        if data["player_requirement"] <= num_players and data["color"] != "purple":
-            decks[data["age"]].append(create_card_from_data(data))
-    
-    # Handle Guilds (Purple) for Age III
-    purple_cards = [c for c in cards_data if c["color"] == "purple"]
+        if data["color"] == "purple":
+            guild_candidates.append(data)
+        elif data["player_requirement"] <= num_players:
+            candidates[data["age"]].append(data)
+
+    decks = {1: [], 2: [], 3: []}
+    target_size = 7 * num_players
+
+    # Age 1 and 2
+    for age in [1, 2]:
+        available = candidates[age]
+        if len(available) < target_size:
+            raise ValueError(f"Not enough cards for Age {age}. Required: {target_size}, Found: {len(available)}")
+        # Randomly sample if we have more cards than needed (e.g. from expansions)
+        selected = random.sample(available, target_size) if len(available) > target_size else available
+        decks[age] = [create_card_from_data(d) for d in selected]
+
+    # Age 3: Guilds + Regular
+    # 1. Select Guilds (N + 2)
     num_guilds = num_players + 2
-    selected_guilds = random.sample(purple_cards, min(num_guilds, len(purple_cards)))
-    for g_data in selected_guilds:
-        decks[3].append(create_card_from_data(g_data))
-        
+    if len(guild_candidates) < num_guilds:
+        raise ValueError(f"Not enough Guild cards. Required: {num_guilds}, Found: {len(guild_candidates)}")
+    selected_guilds = random.sample(guild_candidates, num_guilds)
+    
+    # 2. Fill remainder with Age 3 cards
+    remaining_slots = target_size - len(selected_guilds)
+    available_age3 = candidates[3]
+    if len(available_age3) < remaining_slots:
+        raise ValueError(f"Not enough regular cards for Age 3. Required: {remaining_slots}, Found: {len(available_age3)}")
+    selected_age3 = random.sample(available_age3, remaining_slots) if len(available_age3) > remaining_slots else available_age3
+    
+    decks[3] = [create_card_from_data(d) for d in selected_guilds + selected_age3]
+
     for age in decks:
         random.shuffle(decks[age])
+
+    for age in decks:
+        print(f"Age {age} deck has {len(decks[age])} cards after setup.")
     return decks
 
 def create_card_from_data(card_data: Dict) -> Card:
