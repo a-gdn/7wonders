@@ -281,42 +281,44 @@ class GameEnv:
     
     def _apply_card_effects(self, player: PlayerCity, card: Card):
         """Apply the effects of a built card."""
-        effect = card.effect
+        # Normalize effects to a list to handle both single dict (legacy) and list of effects
+        effects = card.effect if isinstance(card.effect, list) else [card.effect]
         
-        if "production" in effect:
-            prod = effect["production"]
-            for resource, count in prod.items():
-                player.production[resource] += count
-        
-        if "production_choice" in effect:
-            # For RL, we'll pick the first choice for now
-            # In a real implementation, this would be an action
-            choice_effect = effect["production_choice"]
-            options = choice_effect["options"]
-            chosen_resource = options[0]
-            player.production[chosen_resource] += 1
-        
-        if "vp" in effect:
-            player.total_vp_from_cards += effect["vp"]
-        
-        if "military" in effect:
-            player.military_shields += effect["military"]
-        
-        if "science" in effect:
-            symbol = effect["science"]
-            player.science[symbol] += 1
-        
-        if "coins" in effect:
-            player.coins += effect["coins"]
-        
-        if "immediate_coins" in effect:
-            coins_earned = self._calculate_immediate_coins(player, effect["immediate_coins"])
-            player.coins += coins_earned
-        
-        if "trading" in effect:
-            # Yellow card trading benefits - modifies trade costs
-            # Stored for later use
-            pass
+        for effect in effects:
+            if "production" in effect:
+                prod = effect["production"]
+                for resource, count in prod.items():
+                    player.production[resource] += count
+            
+            if "production_choice" in effect:
+                # For RL, we'll pick the first choice for now
+                # In a real implementation, this would be an action
+                choice_effect = effect["production_choice"]
+                options = choice_effect["options"]
+                chosen_resource = options[0]
+                player.production[chosen_resource] += 1
+            
+            if "vp" in effect:
+                player.total_vp_from_cards += effect["vp"]
+            
+            if "military" in effect:
+                player.military_shields += effect["military"]
+            
+            if "science" in effect:
+                symbol = effect["science"]
+                player.science[symbol] += 1
+            
+            if "coins" in effect:
+                player.coins += effect["coins"]
+            
+            if "immediate_coins" in effect:
+                coins_earned = self._calculate_immediate_coins(player, effect["immediate_coins"])
+                player.coins += coins_earned
+            
+            if "trading" in effect:
+                # Yellow card trading benefits - modifies trade costs
+                # Stored for later use
+                pass
         
         # Note: Variable VP effects (vp_per_card, vp_per_wonder_stage) are 
         # calculated at the end of the game in scoring.py, not here.
@@ -421,23 +423,25 @@ class GameEnv:
     
     def _apply_wonder_stage_effects(self, player: PlayerCity, stage: WonderStage):
         """Apply effects from completing a wonder stage."""
-        effect = stage.effect
+        # Normalize effects to a list
+        effects = stage.effect if isinstance(stage.effect, list) else [stage.effect]
         
-        if "vp" in effect:
-            player.total_vp_from_cards += effect["vp"]
-        
-        if "production" in effect:
-            prod = effect["production"]
-            if "options" in prod:
-                # TO DO: Choice of production - pick first for now
-                chosen = prod["options"][0]
-                player.production[chosen] += 1
-            else:
-                for resource, count in prod.items():
-                    player.production[resource] += count
-        
-        if "coins" in effect:
-            player.coins += effect["coins"]
+        for effect in effects:
+            if "vp" in effect:
+                player.total_vp_from_cards += effect["vp"]
+            
+            if "production" in effect:
+                prod = effect["production"]
+                if "options" in prod:
+                    # TO DO: Choice of production - pick first for now
+                    chosen = prod["options"][0]
+                    player.production[chosen] += 1
+                else:
+                    for resource, count in prod.items():
+                        player.production[resource] += count
+            
+            if "coins" in effect:
+                player.coins += effect["coins"]
     
     def _discard_card(self, player: PlayerCity, card: Card):
         """Discard a card and gain 3 coins."""

@@ -6,7 +6,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "wood": 1 } }
+    "effect": [{ "production": { "wood": 1 } }]
   },
   {
     "name": "Chantier",
@@ -15,7 +15,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "wood": 1 } }
+    "effect": [{ "production": { "wood": 1 } }]
   },
   {
     "name": "Cavité",
@@ -24,7 +24,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "stone": 1 } }
+    "effect": [{ "production": { "stone": 1 } }]
   },
   {
     "name": "Cavité",
@@ -33,7 +33,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "stone": 1 } }
+    "effect": [{ "production": { "stone": 1 } }]
   },
   {
     "name": "Bassin argileux",
@@ -42,7 +42,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "clay": 1 } }
+    "effect": [{ "production": { "clay": 1 } }]
   },
   {
     "name": "Bassin argileux",
@@ -51,7 +51,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "clay": 1 } }
+    "effect": [{ "production": { "clay": 1 } }]
   },
   {
     "name": "Filon",
@@ -60,7 +60,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "ore": 1 } }
+    "effect": [{ "production": { "ore": 1 } }]
   },
   {
     "name": "Filon",
@@ -69,7 +69,7 @@
     "color": "brown",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "ore": 1 } }
+    "effect": [{ "production": { "ore": 1 } }]
   },
   {
     "name": "Friche",
@@ -78,7 +78,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["clay", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Excavation",
@@ -87,7 +87,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["clay", "stone"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "stone"], "choice_count": 1 } }]
   },
   {
     "name": "Fosse argileuse",
@@ -96,7 +96,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["clay", "ore"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "ore"], "choice_count": 1 } }]
   },
   {
     "name": "Exploitation forestière",
@@ -105,7 +105,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["stone", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["stone", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Gisement",
@@ -114,7 +114,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["ore", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["ore", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Mine",
@@ -123,7 +123,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production_choice": { "options": ["ore", "stone"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["ore", "stone"], "choice_count": 1 } }]
   },
   {
     "name": "Verrerie",
@@ -132,7 +132,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "glass": 1 } }
+    "effect": [{ "production": { "glass": 1 } }]
   },
   {
     "name": "Verrerie",
@@ -141,7 +141,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "glass": 1 } }
+    "effect": [{ "production": { "glass": 1 } }]
   },
   {
     "name": "Verrerie",
@@ -150,7 +150,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "glass": 1 } }
+    "effect": [{ "production": { "glass": 1 } }]
   },
   {
     "name": "Verrerie",
@@ -159,7 +159,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "glass": 1 } }
+    "effect": [{ "production": { "glass": 1 } }]
   },
   {
     "name": "Presse",
@@ -168,7 +168,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "papyrus": 1 } }
+    "effect": [{ "production": { "papyrus": 1 } }]
   },
   {
     "name": "Presse",
@@ -177,7 +177,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "papyrus": 1 } }
+    "effect": [{ "production": { "papyrus": 1 } }]
   },
   {
     "name": "Presse",
@@ -186,7 +186,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "papyrus": 1 } }
+    "effect": [{ "production": { "papyrus": 1 } }]
   },
   {
     "name": "Presse",
@@ -195,7 +195,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "papyrus": 1 } }
+    "effect": [{ "production": { "papyrus": 1 } }]
   },
   {
     "name": "Métier à tisser",
@@ -204,7 +204,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "textile": 1 } }
+    "effect": [{ "production": { "textile": 1 } }]
   },
   {
     "name": "Métier à tisser",
@@ -213,7 +213,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "textile": 1 } }
+    "effect": [{ "production": { "textile": 1 } }]
   },
   {
     "name": "Métier à tisser",
@@ -222,7 +222,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "textile": 1 } }
+    "effect": [{ "production": { "textile": 1 } }]
   },
   {
     "name": "Métier à tisser",
@@ -231,7 +231,7 @@
     "color": "grey",
     "cost": {},
     "chain_from": null,
-    "effect": { "production": { "textile": 1 } }
+    "effect": [{ "production": { "textile": 1 } }]
   },
   {
     "name": "Puits",
@@ -240,7 +240,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Puits",
@@ -249,7 +249,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Bains",
@@ -258,7 +258,7 @@
     "color": "blue",
     "cost": { "stone": 1 },
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Bains",
@@ -267,7 +267,7 @@
     "color": "blue",
     "cost": { "stone": 1 },
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Autel",
@@ -276,7 +276,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Autel",
@@ -285,7 +285,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Théâtre",
@@ -294,7 +294,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Théâtre",
@@ -303,7 +303,7 @@
     "color": "blue",
     "cost": {},
     "chain_from": null,
-    "effect": { "vp": 3 }
+    "effect": [{ "vp": 3 }]
   },
   {
     "name": "Taverne",
@@ -312,7 +312,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "coins": 5 }
+    "effect": [{ "coins": 5 }]
   },
   {
     "name": "Taverne",
@@ -321,7 +321,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "coins": 5 }
+    "effect": [{ "coins": 5 }]
   },
   {
     "name": "Taverne",
@@ -330,7 +330,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "immediate_coins": 5 }
+    "effect": [{ "coins": 5 }]
   },
   {
     "name": "Comptoir est",
@@ -339,7 +339,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }]
   },
   {
     "name": "Comptoir est",
@@ -348,7 +348,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "right", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }]
   },
   {
     "name": "Comptoir ouest",
@@ -357,7 +357,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }]
   },
   {
     "name": "Comptoir ouest",
@@ -366,7 +366,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "left", "items": ["clay", "ore", "stone", "wood"], "cost": 1 } }]
   },
   {
     "name": "Marché",
@@ -375,7 +375,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }]
   },
   {
     "name": "Marché",
@@ -384,7 +384,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }
+    "effect": [{ "trading": { "target": "both", "items": ["glass", "papyrus", "textile"], "cost": 1 } }]
   },
   {
     "name": "Palissade",
@@ -393,7 +393,7 @@
     "color": "red",
     "cost": { "wood": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Palissade",
@@ -402,7 +402,7 @@
     "color": "red",
     "cost": { "wood": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Caserne",
@@ -411,7 +411,7 @@
     "color": "red",
     "cost": { "ore": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Caserne",
@@ -420,7 +420,7 @@
     "color": "red",
     "cost": { "ore": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Tour de garde",
@@ -429,7 +429,7 @@
     "color": "red",
     "cost": { "clay": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Tour de garde",
@@ -438,7 +438,7 @@
     "color": "red",
     "cost": { "clay": 1 },
     "chain_from": null,
-    "effect": { "military": 1 }
+    "effect": [{ "military": 1 }]
   },
   {
     "name": "Officine",
@@ -447,7 +447,7 @@
     "color": "green",
     "cost": { "textile": 1 },
     "chain_from": null,
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Officine",
@@ -456,7 +456,7 @@
     "color": "green",
     "cost": { "textile": 1 },
     "chain_from": null,
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Atelier",
@@ -465,7 +465,7 @@
     "color": "green",
     "cost": { "glass": 1 },
     "chain_from": null,
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Atelier",
@@ -474,7 +474,7 @@
     "color": "green",
     "cost": { "glass": 1 },
     "chain_from": null,
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Scriptorium",
@@ -483,7 +483,7 @@
     "color": "green",
     "cost": { "papyrus": 1 },
     "chain_from": null,
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Scriptorium",
@@ -492,7 +492,7 @@
     "color": "green",
     "cost": { "papyrus": 1 },
     "chain_from": null,
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Scierie",
@@ -501,7 +501,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "wood": 2 } }
+    "effect": [{ "production": { "wood": 2 } }]
   },
   {
     "name": "Scierie",
@@ -510,7 +510,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "wood": 2 } }
+    "effect": [{ "production": { "wood": 2 } }]
   },
   {
     "name": "Carrière",
@@ -519,7 +519,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "stone": 2 } }
+    "effect": [{ "production": { "stone": 2 } }]
   },
   {
     "name": "Carrière",
@@ -528,7 +528,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "stone": 2 } }
+    "effect": [{ "production": { "stone": 2 } }]
   },
   {
     "name": "Briqueterie",
@@ -537,7 +537,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "clay": 2 } }
+    "effect": [{ "production": { "clay": 2 } }]
   },
   {
     "name": "Briqueterie",
@@ -546,7 +546,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "clay": 2 } }
+    "effect": [{ "production": { "clay": 2 } }]
   },
   {
     "name": "Fonderie",
@@ -555,7 +555,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "ore": 2 } }
+    "effect": [{ "production": { "ore": 2 } }]
   },
   {
     "name": "Fonderie",
@@ -564,7 +564,7 @@
     "color": "brown",
     "cost": { "coins": 1 },
     "chain_from": null,
-    "effect": { "production": { "ore": 2 } }
+    "effect": [{ "production": { "ore": 2 } }]
   },
   {
     "name": "Aqueduc",
@@ -573,7 +573,7 @@
     "color": "blue",
     "cost": { "stone": 3 },
     "chain_from": "Bains",
-    "effect": { "vp": 5 }
+    "effect": [{ "vp": 5 }]
   },
   {
     "name": "Aqueduc",
@@ -582,7 +582,7 @@
     "color": "blue",
     "cost": { "stone": 3 },
     "chain_from": "Bains",
-    "effect": { "vp": 5 }
+    "effect": [{ "vp": 5 }]
   },
   {
     "name": "Temple",
@@ -591,7 +591,7 @@
     "color": "blue",
     "cost": { "clay": 1, "wood": 1, "glass": 1 },
     "chain_from": "Autel",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Temple",
@@ -600,7 +600,7 @@
     "color": "blue",
     "cost": { "clay": 1, "wood": 1, "glass": 1 },
     "chain_from": "Autel",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Statue",
@@ -609,7 +609,7 @@
     "color": "blue",
     "cost": { "ore": 2, "wood": 1 },
     "chain_from": "Puits",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Statue",
@@ -618,7 +618,7 @@
     "color": "blue",
     "cost": { "ore": 2, "wood": 1 },
     "chain_from": "Puits",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Tribunal",
@@ -627,7 +627,7 @@
     "color": "blue",
     "cost": { "clay": 2, "textile": 1 },
     "chain_from": "Scriptorium",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Tribunal",
@@ -636,7 +636,7 @@
     "color": "blue",
     "cost": { "clay": 2, "textile": 1 },
     "chain_from": "Scriptorium",
-    "effect": { "vp": 4 }
+    "effect": [{ "vp": 4 }]
   },
   {
     "name": "Forum",
@@ -645,7 +645,7 @@
     "color": "yellow",
     "cost": { "clay": 2 },
     "chain_from": ["Comptoir est", "Comptoir ouest"],
-    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }]
   },
   {
     "name": "Forum",
@@ -654,7 +654,7 @@
     "color": "yellow",
     "cost": { "clay": 2 },
     "chain_from": ["Comptoir est", "Comptoir ouest"],
-    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }]
   },
   {
     "name": "Forum",
@@ -663,7 +663,7 @@
     "color": "yellow",
     "cost": { "clay": 2 },
     "chain_from": ["Comptoir est", "Comptoir ouest"],
-    "effect": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } }]
   },
   {
     "name": "Caravanesérail",
@@ -672,7 +672,7 @@
     "color": "yellow",
     "cost": { "wood": 2 },
     "chain_from": "Marché",
-    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Caravanesérail",
@@ -681,7 +681,7 @@
     "color": "yellow",
     "cost": { "wood": 2 },
     "chain_from": "Marché",
-    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Caravanesérail",
@@ -690,7 +690,7 @@
     "color": "yellow",
     "cost": { "wood": 2 },
     "chain_from": "Marché",
-    "effect": { "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }
+    "effect": [{ "production_choice": { "options": ["clay", "ore", "stone", "wood"], "choice_count": 1 } }]
   },
   {
     "name": "Vignoble",
@@ -699,7 +699,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }
+    "effect": [{ "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }]
   },
   {
     "name": "Vignoble",
@@ -708,7 +708,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }
+    "effect": [{ "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "neighbors_and_self", "multiplier": 1 } }]
   },
   {
     "name": "Bazar",
@@ -717,7 +717,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }
+    "effect": [{ "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }]
   },
   {
     "name": "Bazar",
@@ -726,7 +726,7 @@
     "color": "yellow",
     "cost": {},
     "chain_from": null,
-    "effect": { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }
+    "effect": [{ "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "neighbors_and_self", "multiplier": 2 } }]
   },
   {
     "name": "Muraille",
@@ -735,7 +735,7 @@
     "color": "red",
     "cost": { "stone": 3 },
     "chain_from": null,
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Muraille",
@@ -744,7 +744,7 @@
     "color": "red",
     "cost": { "stone": 3 },
     "chain_from": null,
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Place d'armes",
@@ -753,7 +753,7 @@
     "color": "red",
     "cost": { "ore": 2, "wood": 1 },
     "chain_from": null,
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Place d'armes",
@@ -762,7 +762,7 @@
     "color": "red",
     "cost": { "ore": 2, "wood": 1 },
     "chain_from": null,
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": " Place d'armes",
@@ -771,7 +771,7 @@
     "color": "red",
     "cost": { "ore": 2, "wood": 1 },
     "chain_from": null,
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Ecuries",
@@ -780,7 +780,7 @@
     "color": "red",
     "cost": { "ore": 1, "clay": 1, "wood": 1 },
     "chain_from": "Officine",
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Ecuries",
@@ -789,7 +789,7 @@
     "color": "red",
     "cost": { "ore": 1, "clay": 1, "wood": 1 },
     "chain_from": "Officine",
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Champs de tir",
@@ -798,7 +798,7 @@
     "color": "red",
     "cost": { "wood": 2, "ore": 1 },
     "chain_from": "Atelier",
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Champs de tir",
@@ -807,7 +807,7 @@
     "color": "red",
     "cost": { "wood": 2, "ore": 1 },
     "chain_from": "Atelier",
-    "effect": { "military": 2 }
+    "effect": [{ "military": 2 }]
   },
   {
     "name": "Laboratoire",
@@ -816,7 +816,7 @@
     "color": "green",
     "cost": { "clay": 2, "papyrus": 1 },
     "chain_from": "Atelier",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Laboratoire",
@@ -825,7 +825,7 @@
     "color": "green",
     "cost": { "clay": 2, "papyrus": 1 },
     "chain_from": "Atelier",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Dispensaire",
@@ -834,7 +834,7 @@
     "color": "green",
     "cost": { "ore": 2, "glass": 1 },
     "chain_from": "Officine",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Dispensaire",
@@ -843,7 +843,7 @@
     "color": "green",
     "cost": { "ore": 2, "glass": 1 },
     "chain_from": "Officine",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Bibliothèque",
@@ -852,7 +852,7 @@
     "color": "green",
     "cost": { "stone": 2, "textile": 1 },
     "chain_from": "Scriptorium",
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Bibliothèque",
@@ -861,7 +861,7 @@
     "color": "green",
     "cost": { "stone": 2, "textile": 1 },
     "chain_from": "Scriptorium",
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Ecole",
@@ -870,7 +870,7 @@
     "color": "green",
     "cost": { "wood": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Ecole",
@@ -879,7 +879,7 @@
     "color": "green",
     "cost": { "wood": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Palace",
@@ -888,7 +888,7 @@
     "color": "blue",
     "cost": { "stone": 1, "ore": 1, "wood": 1, "clay": 1, "glass": 1, "papyrus": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "vp": 8 }
+    "effect": [{ "vp": 8 }]
   },
   {
     "name": "Palace",
@@ -897,7 +897,7 @@
     "color": "blue",
     "cost": { "stone": 1, "ore": 1, "wood": 1, "clay": 1, "glass": 1, "papyrus": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "vp": 8 }
+    "effect": [{ "vp": 8 }]
   },
   {
     "name": "Hôtels de ville",
@@ -906,7 +906,7 @@
     "color": "blue",
     "cost": { "stone": 3, "glass": 1 },
     "chain_from": null,
-    "effect": { "vp": 6 }
+    "effect": [{ "vp": 6 }]
   },
   {
     "name": "Hôtels de ville",
@@ -915,7 +915,7 @@
     "color": "blue",
     "cost": { "stone": 3, "glass": 1 },
     "chain_from": null,
-    "effect": { "vp": 6 }
+    "effect": [{ "vp": 6 }]
   },
   {
     "name": "Sénat",
@@ -924,7 +924,7 @@
     "color": "blue",
     "cost": { "wood": 2, "stone": 1, "ore": 1 },
     "chain_from": "Bibliothèque",
-    "effect": { "vp": 6 }
+    "effect": [{ "vp": 6 }]
   },
   {
     "name": "Sénat",
@@ -933,7 +933,7 @@
     "color": "blue",
     "cost": { "wood": 2, "stone": 1, "ore": 1 },
     "chain_from": "Bibliothèque",
-    "effect": { "vp": 6 }
+    "effect": [{ "vp": 6 }]
   },
   {
     "name": "Panthéon",
@@ -942,7 +942,7 @@
     "color": "blue",
     "cost": { "clay": 2, "ore": 1, "glass": 1, "papyrus": 1, "textile": 1 },
     "chain_from": "Autel",
-    "effect": { "vp": 7 }
+    "effect": [{ "vp": 7 }]
   },
   {
     "name": "Panthéon",
@@ -951,7 +951,7 @@
     "color": "blue",
     "cost": { "clay": 2, "ore": 1, "glass": 1, "papyrus": 1, "textile": 1 },
     "chain_from": "Autel",
-    "effect": { "vp": 7 }
+    "effect": [{ "vp": 7 }]
   },
   {
     "name": "Jardins",
@@ -960,7 +960,7 @@
     "color": "blue",
     "cost": { "clay": 2, "wood": 1 },
     "chain_from": "Théâtre",
-    "effect": { "vp": 5 }
+    "effect": [{ "vp": 5 }]
   },
   {
     "name": "Jardins",
@@ -969,7 +969,7 @@
     "color": "blue",
     "cost": { "clay": 2, "wood": 1 },
     "chain_from": "Théâtre",
-    "effect": { "vp": 5 }
+    "effect": [{ "vp": 5 }]
   },
   {
     "name": "Phare",
@@ -978,7 +978,10 @@
     "color": "yellow",
     "cost": { "stone": 1, "glass": 1 },
     "chain_from": "Caravanesérail",
-    "effect": { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 } }
+    "effect": [
+      { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 }}
+    ]
   },
   {
     "name": "Phare",
@@ -987,7 +990,10 @@
     "color": "yellow",
     "cost": { "stone": 1, "glass": 1 },
     "chain_from": "Caravanesérail",
-    "effect": { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 } }
+    "effect": [
+      { "vp_per_card": { "color": "yellow", "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "yellow", "target": "self", "multiplier": 1 } }
+    ]
   },
   {
     "name": "Port",
@@ -996,7 +1002,10 @@
     "color": "yellow",
     "cost": { "wood": 1, "ore": 1, "textile": 1 },
     "chain_from": "Forum",
-    "effect": { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 }}
+    "effect": [
+      { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 } }
+    ]
   },
   {
     "name": "Port",
@@ -1005,7 +1014,10 @@
     "color": "yellow",
     "cost": { "wood": 1, "ore": 1, "textile": 1 },
     "chain_from": "Forum",
-    "effect": { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 } }
+    "effect": [
+      { "vp_per_card": { "color": "brown", "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "brown", "target": "self", "multiplier": 1 } }
+    ]
   },
   {
     "name": "Chambre de commerce",
@@ -1014,7 +1026,10 @@
     "color": "yellow",
     "cost": { "clay": 2, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+    "effect": [
+      { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+    ]
   },
   {
     "name": "Chambre de commerce",
@@ -1023,7 +1038,10 @@
     "color": "yellow",
     "cost": { "clay": 2, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+    "effect": [
+      { "vp_per_card": { "color": "grey", "target": "self", "multiplier": 2 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "grey", "target": "self", "multiplier": 2 } }
+    ]
   },
   {
     "name": "Ludus",
@@ -1032,7 +1050,10 @@
     "color": "yellow",
     "cost": { "stone": 1, "ore": 1 },
     "chain_from": null,
-    "effect": { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+    "effect": [
+      { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+    ]
   },
   {
     "name": "Ludus",
@@ -1041,7 +1062,10 @@
     "color": "yellow",
     "cost": { "stone": 1, "ore": 1 },
     "chain_from": null,
-    "effect": { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 }, "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+    "effect": [
+      { "vp_per_card": { "color": "red", "target": "self", "multiplier": 2 } },
+      { "immediate_coins": { "type": "coins_per_card", "color": "red", "target": "self", "multiplier": 1 } }
+    ]
   },
   {
     "name": "Arène",
@@ -1050,7 +1074,10 @@
     "color": "yellow",
     "cost": { "clay": 2, "ore": 1 },
     "chain_from": "Dispensaire",
-    "effect": { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+    "effect": [
+      { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+    ]
   },
   {
     "name": "Arène",
@@ -1059,7 +1086,10 @@
     "color": "yellow",
     "cost": { "clay": 2, "ore": 1 },
     "chain_from": "Dispensaire",
-    "effect": { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 }, "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+    "effect": [
+      { "vp_per_wonder_stage": { "target": "self", "multiplier": 1 } },
+      { "immediate_coins": { "type": "coins_per_wonder_stage", "target": "self", "multiplier": 3 } }
+    ]
   },
   {
     "name": "Loge",
@@ -1068,7 +1098,7 @@
     "color": "green",
     "cost": { "clay": 2, "textile": 1, "papyrus": 1 },
     "chain_from": "Dispensaire",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Loge",
@@ -1077,7 +1107,7 @@
     "color": "green",
     "cost": { "clay": 2, "textile": 1, "papyrus": 1 },
     "chain_from": "Dispensaire",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Académie",
@@ -1086,7 +1116,7 @@
     "color": "green",
     "cost": { "stone": 3, "glass": 1 },
     "chain_from": "Ecole",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Académie",
@@ -1095,7 +1125,7 @@
     "color": "green",
     "cost": { "stone": 3, "glass": 1 },
     "chain_from": "Ecole",
-    "effect": { "science": "compass" }
+    "effect": [{ "science": "compass" }]
   },
   {
     "name": "Etude",
@@ -1104,7 +1134,7 @@
     "color": "green",
     "cost": { "wood": 1, "papyrus": 1, "textile": 1 },
     "chain_from": "Ecole",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Etude",
@@ -1113,7 +1143,7 @@
     "color": "green",
     "cost": { "wood": 1, "papyrus": 1, "textile": 1 },
     "chain_from": "Ecole",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Observatoire",
@@ -1122,7 +1152,7 @@
     "color": "green",
     "cost": { "ore": 2, "glass": 1, "textile": 1 },
     "chain_from": "Laboratoire",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Observatoire",
@@ -1131,7 +1161,7 @@
     "color": "green",
     "cost": { "ore": 2, "glass": 1, "textile": 1 },
     "chain_from": "Laboratoire",
-    "effect": { "science": "gear" }
+    "effect": [{ "science": "gear" }]
   },
   {
     "name": "Université",
@@ -1140,7 +1170,7 @@
     "color": "green",
     "cost": { "wood": 2, "glass": 1, "papyrus": 1 },
     "chain_from": "Bibliothèque",
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Université",
@@ -1149,7 +1179,7 @@
     "color": "green",
     "cost": { "wood": 2, "glass": 1, "papyrus": 1 },
     "chain_from": "Bibliothèque",
-    "effect": { "science": "tablet" }
+    "effect": [{ "science": "tablet" }]
   },
   {
     "name": "Castrum",
@@ -1158,7 +1188,7 @@
     "color": "red",
     "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Castrum",
@@ -1167,7 +1197,7 @@
     "color": "red",
     "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Fortifications",
@@ -1176,7 +1206,7 @@
     "color": "red",
     "cost": { "ore": 3, "stone": 1 },
     "chain_from": "Muraille",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Fortifications",
@@ -1185,7 +1215,7 @@
     "color": "red",
     "cost": { "ore": 3, "stone": 1 },
     "chain_from": "Muraille",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Arsenal",
@@ -1194,7 +1224,7 @@
     "color": "red",
     "cost": { "wood": 2, "ore": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Arsenal",
@@ -1203,7 +1233,7 @@
     "color": "red",
     "cost": { "wood": 2, "ore": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Atelier de siège",
@@ -1212,7 +1242,7 @@
     "color": "red",
     "cost": { "wood": 1, "clay": 3 },
     "chain_from": "Laboratoire",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Atelier de siège",
@@ -1221,7 +1251,7 @@
     "color": "red",
     "cost": { "wood": 1, "clay": 3 },
     "chain_from": "Laboratoire",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Cirque",
@@ -1230,7 +1260,7 @@
     "color": "red",
     "cost": { "clay": 2, "ore": 1},
     "chain_from": "Place d'armes",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Cirque",
@@ -1239,7 +1269,7 @@
     "color": "red",
     "cost": { "clay": 2, "ore": 1},
     "chain_from": "Place d'armes",
-    "effect": { "military": 3 }
+    "effect": [{ "military": 3 }]
   },
   {
     "name": "Guilde des travailleurs",
@@ -1248,7 +1278,7 @@
     "color": "purple",
     "cost": { "ore": 2, "wood": 1, "stone": 1, "clay": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "brown", "target": "neighbors", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_card", "color": "brown", "target": "neighbors", "multiplier": 1 }]
   },
   {
     "name": "Guilde des artisans",
@@ -1257,7 +1287,7 @@
     "color": "purple",
     "cost": { "stone": 2, "ore": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "grey", "target": "neighbors", "multiplier": 2 }
+    "effect": [{ "type": "vp_per_card", "color": "grey", "target": "neighbors", "multiplier": 2 }]
   },
   {
     "name": "Guilde des magistrats",
@@ -1266,7 +1296,7 @@
     "color": "purple",
     "cost": { "wood": 3, "stone": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "blue", "target": "neighbors", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_card", "color": "blue", "target": "neighbors", "multiplier": 1 }]
   },
   {
     "name": "Guilde des commerçants",
@@ -1275,7 +1305,7 @@
     "color": "purple",
     "cost": { "glass": 1, "papyrus": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "yellow", "target": "neighbors", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_card", "color": "yellow", "target": "neighbors", "multiplier": 1 }]
   },
   {
     "name": "Guilde des bâtisseurs",
@@ -1284,7 +1314,7 @@
     "color": "purple",
     "cost": { "stone": 3, "clay": 2, "glass": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_wonder_stage", "target": "neighbors_and_self", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_wonder_stage", "target": "neighbors_and_self", "multiplier": 1 }]
   },
   {
     "name": "Guilde des espions",
@@ -1293,7 +1323,7 @@
     "color": "purple",
     "cost": { "clay": 2, "glass": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "red", "target": "neighbors", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_card", "color": "red", "target": "neighbors", "multiplier": 1 }]
   },
   {
     "name": "Guilde des philosophes",
@@ -1302,7 +1332,7 @@
     "color": "purple",
     "cost": { "clay": 3, "papyrus": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_card", "color": "green", "target": "neighbors", "multiplier": 1 }
+    "effect": [{ "type": "vp_per_card", "color": "green", "target": "neighbors", "multiplier": 1 }]
   },
   {
     "name": "Guilde des décorateurs",
@@ -1311,7 +1341,7 @@
     "color": "purple",
     "cost": { "ore": 2, "stone": 1, "textile": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_all_wonder_stages", "value": 7 }
+    "effect": [{ "type": "vp_all_wonder_stages", "value": 7 }]
   },
   {
     "name": "Guilde des scientifiques",
@@ -1320,7 +1350,7 @@
     "color": "purple",
     "cost": { "wood": 2, "ore": 2, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "science_wildcard": ["compass", "tablet", "gear"] }
+    "effect": [{ "science_wildcard": ["compass", "tablet", "gear"] }]
   },
   {
     "name": "Guilde des armateurs",
@@ -1329,6 +1359,6 @@
     "color": "purple",
     "cost": { "wood": 3, "glass": 1, "papyrus": 1 },
     "chain_from": null,
-    "effect": { "type": "vp_per_set", "colors": ["brown", "grey", "purple"], "multiplier": 1 }
+    "effect": [{ "type": "vp_per_set", "colors": ["brown", "grey", "purple"], "multiplier": 1 }]
   }
 ]
