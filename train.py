@@ -28,11 +28,11 @@ LEARNING_RATE = 0.0003
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_RATIO = 0.2
-ENTROPY_COEF = 0.01
+ENTROPY_COEF = 0.03
 VALUE_COEF = 0.5
 BATCH_SIZE = 64
 EPOCHS_PER_ITERATION = 4
-SELF_PLAY_GAMES = 100  # Games per iteration
+SELF_PLAY_GAMES = 150  # Games per iteration
 ARENA_GAMES = 300      # Games for evaluation
 EVAL_INTERVAL = 5     # Iterations between evaluations
 NUM_PLAYERS = 4       # Number of players
@@ -44,14 +44,30 @@ class DataProcessor:
     def __init__(self, env: GameEnv):
         self.card_to_id = {}
         self.id_to_card = {}
+        self.card_colors = {}
+        self.wonder_to_id = {}
         self._build_vocab(env)
         
         self.num_cards = len(self.card_to_id)
+        self.num_wonders = len(self.wonder_to_id)
         self.action_space_size = self.num_cards * 3
-        # 2 (Global) + 14 (Player) + (Num_Opponents * 10) + 3 * num_cards
-        # Opponent features: Coins(1) + Shields(1) + Stage(1) + Resources(7) = 10
-        self.num_opponents = env.num_players - 1
-        self.input_dim = 16 + (self.num_opponents * 10) + 3 * self.num_cards
+        
+        # Input Dimension Calculation (Raw Data Philosophy)
+        # Global: Age(1) + Turn(1) = 2
+        # Per Player (Self + Opponents):
+        #   Wonder Name (One-hot): num_wonders
+        #   Wonder Side (One-hot): 2 (Day/Night)
+        #   Wonder Stage: 1
+        #   Coins: 1
+        #   Production: 7
+        #   Science: 3
+        #   Shields: 1
+        #   Military Score: 1
+        #   Built Cards (Multi-hot): num_cards
+        self.per_player_dim = self.num_wonders + 2 + 1 + 1 + 7 + 3 + 1 + 1 + self.num_cards
+        
+        # Self Only (Private): Hand(num_cards) + Memory(num_cards)
+        self.input_dim = 2 + (env.num_players * self.per_player_dim) + (2 * self.num_cards)
         
     def _build_vocab(self, env: GameEnv):
         """Build vocabulary from all possible cards in the game database."""
@@ -59,12 +75,19 @@ class DataProcessor:
         unique_names = set()
         for card_data in env.cards_data:
             unique_names.add(card_data["name"])
+            self.card_colors[card_data["name"]] = card_data["color"]
         
         # Create mappings
         sorted_names = sorted(list(unique_names))
         for idx, name in enumerate(sorted_names):
             self.card_to_id[name] = idx
             self.id_to_card[idx] = name
+            
+        # Build Wonder vocabulary
+        unique_wonders = set()
+        for w in env.wonder_data:
+            unique_wonders.add(w["name"])
+        self.wonder_to_id = {name: i for i, name in enumerate(sorted(list(unique_wonders)))}
             
         print(f"DataProcessor: Vocab size {len(self.card_to_id)} cards.")
 
@@ -81,53 +104,63 @@ class DataProcessor:
         features.append(obs["current_age"] / 3.0)
         features.append(obs["current_turn"] / 6.0)
         
-        # 2. Player State (Self)
-        features.append(p_obs["coins"] / 20.0)
-        features.append(p_obs["shields"] / 10.0)
-        features.append(p_obs["wonder_stage_progress"] / 4.0)
-        features.append(1.0 if p_obs["wonder_side"] == "day" else 0.0)
-        
-        # Resources (Production) - simplified vector
-        resources = ["wood", "stone", "ore", "clay", "glass", "papyrus", "textile"]
-        for r in resources:
-            features.append(p_obs["production"].get(r, 0) / 5.0)
-            
-        # Science
-        science = ["compass", "gear", "tablet"]
-        for s in science:
-            features.append(p_obs["science"].get(s, 0) / 5.0)
-            
-        # 3. Opponent States (Relative Clockwise)
-        # Include all opponents (Right, Across..., Left)
         num_players = obs["num_players"]
         
-        for i in range(1, num_players):
-            nid = (player_id + i) % num_players
-            n_obs = obs["players"][nid]
+        # 2. All Players (Self then Opponents in relative order)
+        for i in range(num_players):
+            target_pid = (player_id + i) % num_players
+            target_obs = obs["players"][target_pid]
             
-            features.append(n_obs["coins"] / 20.0)
-            features.append(n_obs["shields"] / 10.0)
-            features.append(n_obs["wonder_stage_progress"] / 4.0)
-            for r in resources:
-                features.append(n_obs["production"].get(r, 0) / 5.0)
+            # Wonder Name (One-hot)
+            w_vec = np.zeros(self.num_wonders)
+            if target_obs["wonder_name"] in self.wonder_to_id:
+                w_vec[self.wonder_to_id[target_obs["wonder_name"]]] = 1.0
+            features.extend(w_vec)
+            
+            # Wonder Side (One-hot)
+            features.append(1.0 if target_obs["wonder_side"] == "day" else 0.0)
+            features.append(1.0 if target_obs["wonder_side"] == "night" else 0.0)
+            
+            # Wonder Stage
+            features.append(target_obs["wonder_stage_progress"] / 4.0)
+            
+            # Coins
+            features.append(target_obs["coins"] / 20.0)
+            
+            # Production
+            for r in ["wood", "stone", "ore", "clay", "glass", "papyrus", "textile"]:
+                features.append(target_obs["production"].get(r, 0) / 5.0)
+                
+            # Science
+            for s in ["compass", "gear", "tablet"]:
+                features.append(target_obs["science"].get(s, 0) / 5.0)
+                
+            # Shields
+            features.append(target_obs["shields"] / 10.0)
+            
+            # Military Score
+            features.append(target_obs["military_tokens_score"] / 10.0)
+            
+            # Built Cards (Multi-hot) - Raw Data
+            built_vec = np.zeros(self.num_cards)
+            for card_name in target_obs["built_card_names"]:
+                if card_name in self.card_to_id:
+                    built_vec[self.card_to_id[card_name]] = 1.0
+            features.extend(built_vec)
 
-        # 4. Hand (Multi-hot encoding)
+        # 3. Self Only (Private Information)
+        self_obs = obs["players"][player_id]
+        
+        # Hand (Multi-hot)
         hand_vec = np.zeros(self.num_cards)
-        for card_name in p_obs["current_hand"]:
+        for card_name in self_obs["current_hand"]:
             if card_name in self.card_to_id:
                 hand_vec[self.card_to_id[card_name]] = 1.0
         features.extend(hand_vec)
         
-        # 5. Built Cards (Multi-hot encoding)
-        built_vec = np.zeros(self.num_cards)
-        for card_name in p_obs["built_card_names"]:
-            if card_name in self.card_to_id:
-                built_vec[self.card_to_id[card_name]] = 1.0
-        features.extend(built_vec)
-        
-        # 6. Memory of Circulation (Multi-hot encoding)
+        # Memory of Circulation (Multi-hot)
         mem_vec = np.zeros(self.num_cards)
-        for card_name in p_obs.get("memory_known_cards", []):
+        for card_name in self_obs.get("memory_known_cards", []):
             if card_name in self.card_to_id:
                 mem_vec[self.card_to_id[card_name]] = 1.0
         features.extend(mem_vec)
@@ -320,6 +353,7 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
     # Storage for each player
     trajectories = {i: {'states': [], 'actions': [], 'log_probs': [], 'values': [], 'rewards': []} 
                    for i in range(env.num_players)}
+    action_stats = {}
     
     while not done:
         actions = {}
@@ -341,6 +375,16 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
             
             # Map to string for env
             actions[pid] = processor.index_to_action(action_idx)
+            
+            # Track stats
+            act_str = actions[pid]
+            stat_key = "unknown"
+            if act_str.startswith("wonder_stage"): stat_key = "Wonder"
+            elif act_str.startswith("discard"): stat_key = "Discard"
+            else:
+                # It's a build, get color
+                stat_key = f"Build {processor.card_colors.get(act_str, 'Unknown').title()}"
+            action_stats[stat_key] = action_stats.get(stat_key, 0) + 1
             
         # 2. Step environment
         next_obs, rewards, done, _ = env.step(actions)
@@ -375,7 +419,7 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
         # Assign final reward to the last step
         trajectories[pid]['rewards'][-1] += final_reward
         
-    return trajectories
+    return trajectories, action_stats
 
 
 def arena_battle(env: GameEnv, candidate_agent: PPOAgent, best_agent: PPOAgent, processor: DataProcessor, num_games: int):
@@ -457,9 +501,10 @@ def main():
         
         # 1. Self-Play Data Collection
         all_states, all_actions, all_log_probs, all_returns, all_advantages = [], [], [], [], []
+        total_action_stats = {}
         
         for g in range(SELF_PLAY_GAMES):
-            trajectories = run_self_play_episode(env, agent, processor)
+            trajectories, stats = run_self_play_episode(env, agent, processor)
             
             # Process trajectories for each player
             for pid, traj in trajectories.items():
@@ -476,6 +521,10 @@ def main():
                 all_log_probs.extend(traj['log_probs'])
                 all_returns.extend(returns)
                 all_advantages.extend(advantages)
+            
+            # Aggregate stats
+            for k, v in stats.items():
+                total_action_stats[k] = total_action_stats.get(k, 0) + v
                 
         # Normalize advantages
         all_advantages = np.array(all_advantages, dtype=np.float32)
@@ -515,6 +564,13 @@ def main():
         
         print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f}, Ent: {avg_entropy:.4f})")
         
+        # Print Action Distribution
+        print("Action Distribution:")
+        total_acts = sum(total_action_stats.values())
+        for k, v in sorted(total_action_stats.items(), key=lambda x: x[1], reverse=True):
+            if v/total_acts > 0.01: # Only show > 1%
+                print(f"  {k}: {v/total_acts:.1%}")
+
         # 3. Arena Evaluation
         if iteration % EVAL_INTERVAL == 0:
             print("Evaluating against best model...")
