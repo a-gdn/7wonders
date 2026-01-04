@@ -31,9 +31,6 @@ EPOCHS_PER_ITERATION = 4
 SELF_PLAY_GAMES = 100  # Games per iteration
 ARENA_GAMES = 300      # Games for evaluation
 EVAL_INTERVAL = 5     # Iterations between evaluations
-MAX_CARDS = 200       # Estimated max unique cards in deck
-ACTION_SPACE_SIZE = MAX_CARDS * 3  # Build, Wonder, Discard per card
-INPUT_DIM = 800       # Fixed input dimension for observation vector
 
 class DataProcessor:
     """
@@ -43,6 +40,11 @@ class DataProcessor:
         self.card_to_id = {}
         self.id_to_card = {}
         self._build_vocab(env)
+        
+        self.num_cards = len(self.card_to_id)
+        self.action_space_size = self.num_cards * 3
+        # 2 (Global) + 14 (Player) + 3 * num_cards (Hand, Built, Memory)
+        self.input_dim = 16 + 3 * self.num_cards
         
     def _build_vocab(self, env: GameEnv):
         """Build vocabulary from all possible cards in the game database."""
@@ -89,32 +91,27 @@ class DataProcessor:
             features.append(p_obs["science"].get(s, 0) / 5.0)
             
         # 3. Hand (Multi-hot encoding)
-        hand_vec = np.zeros(MAX_CARDS)
+        hand_vec = np.zeros(self.num_cards)
         for card_name in p_obs["current_hand"]:
             if card_name in self.card_to_id:
                 hand_vec[self.card_to_id[card_name]] = 1.0
         features.extend(hand_vec)
         
         # 4. Built Cards (Multi-hot encoding)
-        built_vec = np.zeros(MAX_CARDS)
+        built_vec = np.zeros(self.num_cards)
         for card_name in p_obs["built_card_names"]:
             if card_name in self.card_to_id:
                 built_vec[self.card_to_id[card_name]] = 1.0
         features.extend(built_vec)
         
         # 5. Memory of Circulation (Multi-hot encoding)
-        mem_vec = np.zeros(MAX_CARDS)
+        mem_vec = np.zeros(self.num_cards)
         for card_name in p_obs.get("memory_known_cards", []):
             if card_name in self.card_to_id:
                 mem_vec[self.card_to_id[card_name]] = 1.0
         features.extend(mem_vec)
         
-        # Pad to fixed input dimension
         vec = np.array(features, dtype=np.float32)
-        if len(vec) < INPUT_DIM:
-            vec = np.pad(vec, (0, INPUT_DIM - len(vec)))
-        else:
-            vec = vec[:INPUT_DIM]
             
         return vec
 
@@ -123,12 +120,12 @@ class DataProcessor:
         Create a boolean mask of valid actions for the current state.
         1 = Valid, 0 = Invalid.
         """
-        mask = np.zeros(ACTION_SPACE_SIZE, dtype=np.float32)
+        mask = np.zeros(self.action_space_size, dtype=np.float32)
         legal_actions = env.get_legal_actions(player_id)
         
         for action_str in legal_actions:
             idx = self.action_to_index(action_str)
-            if idx is not None and idx < ACTION_SPACE_SIZE:
+            if idx is not None and idx < self.action_space_size:
                 mask[idx] = 1.0
                 
         return mask
@@ -140,7 +137,7 @@ class DataProcessor:
         # N..2N-1: Build Wonder (Card ID)
         # 2N..3N-1: Discard (Card ID)
         
-        N = MAX_CARDS
+        N = self.num_cards
         
         if action_str.startswith("wonder_stage_"):
             card_name = action_str.replace("wonder_stage_", "")
@@ -166,7 +163,7 @@ class DataProcessor:
 
     def index_to_action(self, idx: int) -> str:
         """Map integer index back to action string."""
-        N = MAX_CARDS
+        N = self.num_cards
         
         if idx < N:
             return self.id_to_card.get(idx, "discard")
@@ -180,9 +177,9 @@ class DataProcessor:
         return "discard"
 
 
-def create_actor_critic_model():
+def create_actor_critic_model(input_dim: int, action_space_size: int):
     """Creates the PPO Actor-Critic Neural Network."""
-    inputs = layers.Input(shape=(INPUT_DIM,))
+    inputs = layers.Input(shape=(input_dim,))
     
     # Shared Backbone
     x = layers.Dense(512, activation="relu")(inputs)
@@ -190,7 +187,7 @@ def create_actor_critic_model():
     
     # Actor Head (Policy)
     # Outputs logits for all possible actions
-    actor = layers.Dense(ACTION_SPACE_SIZE, activation=None, name="actor_logits")(x)
+    actor = layers.Dense(action_space_size, activation=None, name="actor_logits")(x)
     
     # Critic Head (Value)
     # Outputs estimated win probability/score (-1 to 1 or raw score)
@@ -393,7 +390,7 @@ def main():
     processor = DataProcessor(env)
     
     # Initialize Models
-    model = create_actor_critic_model()
+    model = create_actor_critic_model(processor.input_dim, processor.action_space_size)
     agent = PPOAgent(model, processor)
     
     # Best model (copy of current initially)

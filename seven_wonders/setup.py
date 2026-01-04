@@ -78,8 +78,6 @@ def setup_decks(num_players: int, cards_data: List[Dict]) -> Dict[int, List[Card
     for age in decks:
         random.shuffle(decks[age])
 
-    for age in decks:
-        print(f"Age {age} deck has {len(decks[age])} cards after setup.")
     return decks
 
 def create_card_from_data(card_data: Dict) -> Card:
