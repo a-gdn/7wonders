@@ -81,7 +81,7 @@ class DataProcessor:
         
         # 2. Player State (Self)
         features.append(p_obs["coins"] / 20.0)
-        features.append(p_obs["military_shields"] / 10.0)
+        features.append(p_obs["shields"] / 10.0)
         features.append(p_obs["wonder_stage_progress"] / 4.0)
         features.append(1.0 if p_obs["wonder_side"] == "day" else 0.0)
         

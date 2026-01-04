@@ -76,7 +76,7 @@ The `get_observation()` method returns a dictionary representing the global game
             "wonder_side": "day",
             "production": { "wood": 0, "stone": 0, "ore": 0, "clay": 0, "glass": 0, "papyrus": 0, "textile": 0 },
             "science": { "compass": 0, "gear": 0, "tablet": 0 },
-            "military_shields": 0,
+            "shields": 0,
             "military_tokens_score": 0,
             "wonder_stage_progress": 0,
             "max_wonder_stages": 3,
