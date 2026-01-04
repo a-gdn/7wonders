@@ -28,7 +28,7 @@ LEARNING_RATE = 0.0003
 GAMMA = 0.99
 GAE_LAMBDA = 0.95
 CLIP_RATIO = 0.2
-ENTROPY_COEF = 0.03
+ENTROPY_COEF = 0.1
 VALUE_COEF = 0.5
 BATCH_SIZE = 64
 EPOCHS_PER_ITERATION = 4
@@ -513,102 +513,108 @@ def main():
     
     print("Starting Training Loop...")
     
-    for iteration in range(1, 101):
-        print(f"\n=== Iteration {iteration} ===")
-        
-        # 1. Self-Play Data Collection
-        all_states, all_actions, all_log_probs, all_returns, all_advantages = [], [], [], [], []
-        total_action_stats = {}
-        
-        for g in range(SELF_PLAY_GAMES):
-            trajectories, stats = run_self_play_episode(env, agent, processor)
+    try:
+        for iteration in range(1, 101):
+            print(f"\n=== Iteration {iteration} ===")
             
-            # Process trajectories for each player
-            for pid, traj in trajectories.items():
-                # Compute GAE
-                rewards = np.array(traj['rewards'])
-                values = np.array(traj['values'])
-                dones = np.zeros_like(rewards)
-                dones[-1] = 1  # Last step is terminal
-                
-                advantages, returns = compute_gae(rewards, values, 0.0, dones)
-                
-                all_states.extend(traj['states'])
-                all_actions.extend(traj['actions'])
-                all_log_probs.extend(traj['log_probs'])
-                all_returns.extend(returns)
-                all_advantages.extend(advantages)
+            # 1. Self-Play Data Collection
+            all_states, all_actions, all_log_probs, all_returns, all_advantages = [], [], [], [], []
+            total_action_stats = {}
             
-            # Aggregate stats
-            for k, v in stats.items():
-                total_action_stats[k] = total_action_stats.get(k, 0) + v
+            for g in range(SELF_PLAY_GAMES):
+                trajectories, stats = run_self_play_episode(env, agent, processor)
                 
-        # Normalize advantages
-        all_advantages = np.array(all_advantages, dtype=np.float32)
-        all_advantages = (all_advantages - np.mean(all_advantages)) / (np.std(all_advantages) + 1e-8)
-        
-        # Ensure correct types for dataset
-        all_states = np.array(all_states, dtype=np.float32)
-        all_log_probs = np.array(all_log_probs, dtype=np.float32)
-        all_returns = np.array(all_returns, dtype=np.float32)
-        all_actions = np.array(all_actions, dtype=np.int32)
-        
-        # 2. Training
-        print(f"Training on {len(all_states)} steps...")
-        dataset = tf.data.Dataset.from_tensor_slices((
-            all_states, all_actions, all_log_probs, all_returns, all_advantages
-        )).shuffle(len(all_states)).batch(BATCH_SIZE)
-        
-        total_loss_sum = 0
-        policy_loss_sum = 0
-        value_loss_sum = 0
-        entropy_sum = 0
-        num_steps = 0
-
-        for _ in range(EPOCHS_PER_ITERATION):
-            for batch in dataset:
-                t_loss, p_loss, v_loss, ent = agent.train_step(*batch)
-                total_loss_sum += t_loss
-                policy_loss_sum += p_loss
-                value_loss_sum += v_loss
-                entropy_sum += ent
-                num_steps += 1
-
-        avg_total = total_loss_sum / num_steps if num_steps > 0 else 0
-        avg_policy = policy_loss_sum / num_steps if num_steps > 0 else 0
-        avg_value = value_loss_sum / num_steps if num_steps > 0 else 0
-        avg_entropy = entropy_sum / num_steps if num_steps > 0 else 0
-        
-        print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f}, Ent: {avg_entropy:.4f})")
-        
-        # Print Action Distribution
-        print("Action Distribution:")
-        total_acts = sum(total_action_stats.values())
-        for k, v in sorted(total_action_stats.items(), key=lambda x: x[1], reverse=True):
-            if v/total_acts > 0.01: # Only show > 1%
-                print(f"  {k}: {v/total_acts:.1%}")
-
-        # 3. Arena Evaluation
-        if iteration % EVAL_INTERVAL == 0:
-            print("Evaluating against best model...")
-            win_rate, cand_score, best_score = arena_battle(env, agent, best_agent, processor, ARENA_GAMES)
-            print(f"Candidate Win Rate: {win_rate:.2%} (Avg Score: {cand_score:.1f} vs {best_score:.1f})")
+                # Process trajectories for each player
+                for pid, traj in trajectories.items():
+                    # Compute GAE
+                    rewards = np.array(traj['rewards'])
+                    values = np.array(traj['values'])
+                    dones = np.zeros_like(rewards)
+                    dones[-1] = 1  # Last step is terminal
+                    
+                    advantages, returns = compute_gae(rewards, values, 0.0, dones)
+                    
+                    all_states.extend(traj['states'])
+                    all_actions.extend(traj['actions'])
+                    all_log_probs.extend(traj['log_probs'])
+                    all_returns.extend(returns)
+                    all_advantages.extend(advantages)
+                
+                # Aggregate stats
+                for k, v in stats.items():
+                    total_action_stats[k] = total_action_stats.get(k, 0) + v
+                    
+            # Normalize advantages
+            all_advantages = np.array(all_advantages, dtype=np.float32)
+            all_advantages = (all_advantages - np.mean(all_advantages)) / (np.std(all_advantages) + 1e-8)
             
-            # Dynamic margin: 5% for 2p (AlphaZero standard), scaled down for more players
-            update_margin = 0.1 / NUM_PLAYERS
-            if win_rate >= (1 / NUM_PLAYERS) + update_margin:
-                print("🚀 New Best Model Found! Saving...")
-                best_model.set_weights(model.get_weights())
-                model.save(best_model_path)
-            else:
-                print("Candidate failed to beat best model.")
+            # Ensure correct types for dataset
+            all_states = np.array(all_states, dtype=np.float32)
+            all_log_probs = np.array(all_log_probs, dtype=np.float32)
+            all_returns = np.array(all_returns, dtype=np.float32)
+            all_actions = np.array(all_actions, dtype=np.int32)
+            
+            # 2. Training
+            print(f"Training on {len(all_states)} steps...")
+            dataset = tf.data.Dataset.from_tensor_slices((
+                all_states, all_actions, all_log_probs, all_returns, all_advantages
+            )).shuffle(len(all_states)).batch(BATCH_SIZE)
+            
+            total_loss_sum = 0
+            policy_loss_sum = 0
+            value_loss_sum = 0
+            entropy_sum = 0
+            num_steps = 0
+
+            for _ in range(EPOCHS_PER_ITERATION):
+                for batch in dataset:
+                    t_loss, p_loss, v_loss, ent = agent.train_step(*batch)
+                    total_loss_sum += t_loss
+                    policy_loss_sum += p_loss
+                    value_loss_sum += v_loss
+                    entropy_sum += ent
+                    num_steps += 1
+
+            avg_total = total_loss_sum / num_steps if num_steps > 0 else 0
+            avg_policy = policy_loss_sum / num_steps if num_steps > 0 else 0
+            avg_value = value_loss_sum / num_steps if num_steps > 0 else 0
+            avg_entropy = entropy_sum / num_steps if num_steps > 0 else 0
+            
+            print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f}, Ent: {avg_entropy:.4f})")
+            
+            # Print Action Distribution
+            print("Action Distribution:")
+            total_acts = sum(total_action_stats.values())
+            for k, v in sorted(total_action_stats.items(), key=lambda x: x[1], reverse=True):
+                if v/total_acts > 0.01: # Only show > 1%
+                    print(f"  {k}: {v/total_acts:.1%}")
+
+            # 3. Arena Evaluation
+            if iteration % EVAL_INTERVAL == 0:
+                print("Evaluating against best model...")
+                win_rate, cand_score, best_score = arena_battle(env, agent, best_agent, processor, ARENA_GAMES)
+                print(f"Candidate Win Rate: {win_rate:.2%} (Avg Score: {cand_score:.1f} vs {best_score:.1f})")
                 
-        # Save latest model (overwriting previous)
+                # Dynamic margin: 5% for 2p (AlphaZero standard), scaled down for more players
+                update_margin = 0.1 / NUM_PLAYERS
+                if win_rate >= (1 / NUM_PLAYERS) + update_margin:
+                    print("🚀 New Best Model Found! Saving...")
+                    best_model.set_weights(model.get_weights())
+                    model.save(best_model_path)
+                else:
+                    print("Candidate failed to beat best model.")
+                    
+            # Save latest model (overwriting previous)
+            model.save(latest_model_path)
+
+            # Save checkpoint
+            # if iteration % 10 == 0:
+            #     model.save(f"seven_wonders_iter_{iteration}.keras")
+
+    except KeyboardInterrupt:
+        print("\nTraining interrupted! Saving current model state...")
         model.save(latest_model_path)
-
-        # Save checkpoint
-        # if iteration % 10 == 0:
-        #     model.save(f"seven_wonders_iter_{iteration}.keras")
+        print("Model saved. Exiting.")
 
 if __name__ == "__main__":
     main()
