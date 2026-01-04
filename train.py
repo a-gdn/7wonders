@@ -33,7 +33,7 @@ ARENA_GAMES = 300      # Games for evaluation
 EVAL_INTERVAL = 5     # Iterations between evaluations
 MAX_CARDS = 200       # Estimated max unique cards in deck
 ACTION_SPACE_SIZE = MAX_CARDS * 3  # Build, Wonder, Discard per card
-INPUT_DIM = 600       # Fixed input dimension for observation vector
+INPUT_DIM = 800       # Fixed input dimension for observation vector
 
 class DataProcessor:
     """
@@ -101,6 +101,13 @@ class DataProcessor:
             if card_name in self.card_to_id:
                 built_vec[self.card_to_id[card_name]] = 1.0
         features.extend(built_vec)
+        
+        # 5. Memory of Circulation (Multi-hot encoding)
+        mem_vec = np.zeros(MAX_CARDS)
+        for card_name in p_obs.get("memory_known_cards", []):
+            if card_name in self.card_to_id:
+                mem_vec[self.card_to_id[card_name]] = 1.0
+        features.extend(mem_vec)
         
         # Pad to fixed input dimension
         vec = np.array(features, dtype=np.float32)

@@ -80,6 +80,9 @@ class GameEnv:
         self.selected_cards = {i: None for i in range(self.num_players)}
         self.selected_action_types = {i: "discard" for i in range(self.num_players)}
         
+        for p in self.players:
+            p.memory_known_cards.clear()
+
         # Deal initial hands for Age I
         setup.deal_age_hand(self.players, self.decks, 0)
         
@@ -101,12 +104,26 @@ class GameEnv:
         
         is_final_turn = self.current_turn == 5
         
+        # Phase 0: Update memory with cards currently in hand (seen this turn)
+        for player in self.players:
+            for card in player.current_hand:
+                player.memory_known_cards.add(card.name)
+
         # Phase 1: Players select cards simultaneously
         self._select_cards(actions, is_final_turn)
         
         # Phase 2: Execute card actions simultaneously
         rewards = self._execute_card_actions()
         
+        # Phase 2.5: Update memory - remove cards that are no longer in circulation (visible to all)
+        visible_cards = set()
+        for p in self.players:
+            visible_cards.update(p.built_card_names)
+        visible_cards.update(c.name for c in self.discard_pile)
+        
+        for p in self.players:
+            p.memory_known_cards.difference_update(visible_cards)
+
         # Phase 3: Rotate hands (unless it's the final turn)
         if not is_final_turn:
             self._rotate_hands()
@@ -126,6 +143,9 @@ class GameEnv:
                 self.state = GameState.GAME_OVER
             else:
                 self.current_turn = 0
+                # Reset memory for new age
+                for p in self.players:
+                    p.memory_known_cards.clear()
                 setup.deal_age_hand(self.players, self.decks, self.current_age)
                 # State remains AGE_ACTIVE
         
@@ -415,6 +435,9 @@ class GameEnv:
         stage.built = True
         player.current_wonder_stage += 1
         
+        # Remove from memory as it's consumed (private knowledge for this player)
+        player.memory_known_cards.discard(card.name)
+        
         # Apply stage effects
         self._apply_wonder_stage_effects(player, stage)
         
@@ -548,7 +571,8 @@ class GameEnv:
                 "current_hand_size": len(player.current_hand),
                 "current_hand": [c.name for c in player.current_hand],
                 "military_tokens_score": sum(player.military_tokens),
-                "built_card_names": list(player.built_card_names)
+                "built_card_names": list(player.built_card_names),
+                "memory_known_cards": list(player.memory_known_cards)
             }
             observation["players"].append(player_obs)
         

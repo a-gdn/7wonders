@@ -28,6 +28,7 @@ class PlayerCity:
     military_tokens: List[int] = field(default_factory=list)
     current_hand: List[Card] = field(default_factory=list)
     total_vp_from_cards: int = 0
+    memory_known_cards: Set[str] = field(default_factory=set)
 
     def exchange_coins(self, coins_to_exchange: int) -> bool:
         # Internal utility logic

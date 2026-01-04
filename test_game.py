@@ -178,6 +178,7 @@ def play_human_vs_bots():
             print(f"Science: {p_obs['science']}")
             print(f"Built Cards: {p_obs['built_card_names']}")
             print(f"Hand: {p_obs['current_hand']}")
+            print(f"Memory: {p_obs['memory_known_cards']}")
 
         actions = {}
         
