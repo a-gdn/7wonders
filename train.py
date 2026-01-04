@@ -280,12 +280,13 @@ class PPOAgent:
             entropy = -tf.reduce_sum(probs * log_probs_all, axis=1)
             entropy_loss = -tf.reduce_mean(entropy)
             
+            # Total = Policy + (0.5 * Value) - (0.01 * Entropy)
             total_loss = policy_loss + VALUE_COEF * value_loss + ENTROPY_COEF * entropy_loss
             
         grads = tape.gradient(total_loss, self.model.trainable_variables)
         self.optimizer.apply_gradients(zip(grads, self.model.trainable_variables))
         
-        return total_loss, policy_loss, value_loss
+        return total_loss, policy_loss, value_loss, tf.reduce_mean(entropy)
 
 
 def compute_gae(rewards, values, next_value, dones):
@@ -354,13 +355,22 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
     # We use normalized score or rank as reward
     from seven_wonders.scoring import calculate_scores
     final_scores = calculate_scores(env)
-    max_score = max(final_scores.values())
     
-    for pid in range(env.num_players):
-        # Reward: 1.0 if winner, 0.0 otherwise (or normalized score)
-        # Simple binary reward for AlphaZero style
-        is_winner = (final_scores[pid] == max_score)
-        final_reward = 1.0 if is_winner else -1.0
+    # Create ranking based on score and coins (tie-breaker)
+    ranking = []
+    for pid, score in final_scores.items():
+        ranking.append((pid, score, env.players[pid].coins))
+        
+    # Sort descending by score, then coins
+    ranking.sort(key=lambda x: (x[1], x[2]), reverse=True)
+    
+    for rank, (pid, _, _) in enumerate(ranking):
+        # Linear interpolation from +1.0 (1st) to -1.0 (Last)
+        # For 4 players: 1.0, 0.33, -0.33, -1.0
+        if env.num_players > 1:
+            final_reward = 1.0 - (2.0 * rank / (env.num_players - 1))
+        else:
+            final_reward = 1.0
         
         # Assign final reward to the last step
         trajectories[pid]['rewards'][-1] += final_reward
@@ -486,21 +496,24 @@ def main():
         total_loss_sum = 0
         policy_loss_sum = 0
         value_loss_sum = 0
+        entropy_sum = 0
         num_steps = 0
 
         for _ in range(EPOCHS_PER_ITERATION):
             for batch in dataset:
-                t_loss, p_loss, v_loss = agent.train_step(*batch)
+                t_loss, p_loss, v_loss, ent = agent.train_step(*batch)
                 total_loss_sum += t_loss
                 policy_loss_sum += p_loss
                 value_loss_sum += v_loss
+                entropy_sum += ent
                 num_steps += 1
 
         avg_total = total_loss_sum / num_steps if num_steps > 0 else 0
         avg_policy = policy_loss_sum / num_steps if num_steps > 0 else 0
         avg_value = value_loss_sum / num_steps if num_steps > 0 else 0
+        avg_entropy = entropy_sum / num_steps if num_steps > 0 else 0
         
-        print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f})")
+        print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f}, Ent: {avg_entropy:.4f})")
         
         # 3. Arena Evaluation
         if iteration % EVAL_INTERVAL == 0:
@@ -508,7 +521,7 @@ def main():
             win_rate = arena_battle(env, agent, best_agent, processor, ARENA_GAMES)
             print(f"Candidate Win Rate: {win_rate:.2%}")
             
-            if win_rate >= 0.55:
+            if win_rate >= (1 / NUM_PLAYERS) + 0.05:
                 print("🚀 New Best Model Found! Saving...")
                 best_model.set_weights(model.get_weights())
                 model.save(best_model_path)
