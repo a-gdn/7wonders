@@ -1183,8 +1183,8 @@
   },
   {
     "name": "Castrum",
-    "age": 4,
-    "player_requirement": 3,
+    "age": 3,
+    "player_requirement": 4,
     "color": "red",
     "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
     "chain_from": null,
@@ -1192,7 +1192,7 @@
   },
   {
     "name": "Castrum",
-    "age": 4,
+    "age": 3,
     "player_requirement": 7,
     "color": "red",
     "cost": { "clay": 2, "wood": 1, "papyrus": 1 },
