@@ -467,13 +467,24 @@ def main():
             all_states, all_actions, all_log_probs, all_returns, all_advantages
         )).shuffle(len(all_states)).batch(BATCH_SIZE)
         
-        total_loss_avg = 0
+        total_loss_sum = 0
+        policy_loss_sum = 0
+        value_loss_sum = 0
+        num_steps = 0
+
         for _ in range(EPOCHS_PER_ITERATION):
             for batch in dataset:
                 t_loss, p_loss, v_loss = agent.train_step(*batch)
-                total_loss_avg += t_loss
+                total_loss_sum += t_loss
+                policy_loss_sum += p_loss
+                value_loss_sum += v_loss
+                num_steps += 1
+
+        avg_total = total_loss_sum / num_steps if num_steps > 0 else 0
+        avg_policy = policy_loss_sum / num_steps if num_steps > 0 else 0
+        avg_value = value_loss_sum / num_steps if num_steps > 0 else 0
         
-        print(f"Loss: {total_loss_avg:.4f}")
+        print(f"Loss: {avg_total:.4f} (P: {avg_policy:.4f}, V: {avg_value:.4f})")
         
         # 3. Arena Evaluation
         if iteration % EVAL_INTERVAL == 0:
