@@ -8,6 +8,8 @@ This script implements a self-play reinforcement learning loop:
 """
 
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import numpy as np
 import tensorflow as tf
 import keras
@@ -15,6 +17,8 @@ from keras import layers, models, optimizers
 import random
 from typing import List, Dict, Tuple
 import copy
+import subprocess
+import platform
 
 from seven_wonders.environment import GameEnv
 from seven_wonders.constants import CardColor
@@ -31,6 +35,7 @@ EPOCHS_PER_ITERATION = 4
 SELF_PLAY_GAMES = 100  # Games per iteration
 ARENA_GAMES = 300      # Games for evaluation
 EVAL_INTERVAL = 5     # Iterations between evaluations
+NUM_PLAYERS = 4       # Number of players
 
 class DataProcessor:
     """
@@ -385,17 +390,38 @@ def arena_battle(env: GameEnv, candidate_agent: PPOAgent, best_agent: PPOAgent, 
 
 
 def main():
+    # Prevent sleep on macOS
+    if platform.system() == "Darwin":
+        try:
+            subprocess.Popen(["caffeinate", "-ims", "-w", str(os.getpid())])
+            print("☕️ Caffeinate active: System sleep prevented.")
+        except FileNotFoundError:
+            pass
+
     # Initialize Environment and Processor
-    env = GameEnv(num_players=4)
+    env = GameEnv(num_players=NUM_PLAYERS)
     processor = DataProcessor(env)
     
+    latest_model_path = f"latest_model_{NUM_PLAYERS}p.keras"
+    best_model_path = f"best_model_{NUM_PLAYERS}p.keras"
+
     # Initialize Models
-    model = create_actor_critic_model(processor.input_dim, processor.action_space_size)
+    if os.path.exists(latest_model_path):
+        print(f"Loading existing latest model ({latest_model_path})...")
+        model = keras.models.load_model(latest_model_path)
+    else:
+        model = create_actor_critic_model(processor.input_dim, processor.action_space_size)
+
     agent = PPOAgent(model, processor)
     
-    # Best model (copy of current initially)
-    best_model = keras.models.clone_model(model)
-    best_model.set_weights(model.get_weights())
+    # Best model
+    if os.path.exists(best_model_path):
+        print(f"Loading existing best model ({best_model_path})...")
+        best_model = keras.models.load_model(best_model_path)
+    else:
+        best_model = keras.models.clone_model(model)
+        best_model.set_weights(model.get_weights())
+
     best_agent = PPOAgent(best_model, processor)
     
     print("Starting Training Loop...")
@@ -458,13 +484,16 @@ def main():
             if win_rate >= 0.55:
                 print("🚀 New Best Model Found! Saving...")
                 best_model.set_weights(model.get_weights())
-                model.save("seven_wonders_best.keras")
+                model.save(best_model_path)
             else:
                 print("Candidate failed to beat best model.")
                 
+        # Save latest model (overwriting previous)
+        model.save(latest_model_path)
+
         # Save checkpoint
-        if iteration % 10 == 0:
-            model.save(f"seven_wonders_iter_{iteration}.keras")
+        # if iteration % 10 == 0:
+        #     model.save(f"seven_wonders_iter_{iteration}.keras")
 
 if __name__ == "__main__":
     main()

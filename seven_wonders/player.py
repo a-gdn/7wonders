@@ -24,7 +24,7 @@ class PlayerCity:
         "compass": 0, "gear": 0, "tablet": 0
     })
     
-    military_shields: int = 0
+    shields: int = 0
     military_tokens: List[int] = field(default_factory=list)
     current_hand: List[Card] = field(default_factory=list)
     total_vp_from_cards: int = 0

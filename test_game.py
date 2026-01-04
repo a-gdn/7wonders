@@ -109,9 +109,10 @@ def test_rl_integration():
             player_obs["coins"],
             sum(player_obs["production"].values()),
             sum(player_obs["science"].values()),
-            player_obs["military_shields"],
+            player_obs["shields"],
             player_obs["wonder_stage_progress"],
             len(player_obs["built_card_names"]),
+            len(player_obs["current_hand"]),
             env_obs["current_turn"],
         ]
         return features
@@ -173,7 +174,7 @@ def play_human_vs_bots():
             role = "You" if pid == 0 else f"Bot {pid + 1}"
             print(f"\n--- Player {pid + 1} ({role}) ---")
             print(f"Wonder: {p_obj.wonder_name} ({wonder_side}) (Stage {p_obs['wonder_stage_progress']})")
-            print(f"Coins: {p_obs['coins']} | Shields: {p_obs['military_shields']}")
+            print(f"Coins: {p_obs['coins']} | Shields: {p_obs['shields']}")
             print(f"Resources: {p_obs['production']}")
             print(f"Science: {p_obs['science']}")
             print(f"Built Cards: {p_obs['built_card_names']}")

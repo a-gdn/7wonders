@@ -321,8 +321,8 @@ class GameEnv:
             if "vp" in effect:
                 player.total_vp_from_cards += effect["vp"]
             
-            if "military" in effect:
-                player.military_shields += effect["military"]
+            if "shield" in effect:
+                player.shields += effect["shield"]
             
             if "science" in effect:
                 symbol = effect["science"]
@@ -496,9 +496,9 @@ class GameEnv:
             left_neighbor = self.players[(i - 1) % self.num_players]
             right_neighbor = self.players[(i + 1) % self.num_players]
             
-            player_shields = player.military_shields
-            left_shields = left_neighbor.military_shields
-            right_shields = right_neighbor.military_shields
+            player_shields = player.shields
+            left_shields = left_neighbor.shields
+            right_shields = right_neighbor.shields
             
             # Compare with left neighbor
             if player_shields > left_shields:
@@ -564,7 +564,7 @@ class GameEnv:
                 "wonder_side": player.wonder_side,
                 "production": dict(player.production),
                 "science": dict(player.science),
-                "military_shields": player.military_shields,
+                "shields": player.shields,
                 "wonder_stage_progress": player.current_wonder_stage,
                 "max_wonder_stages": len(player.wonder_stages),
                 "cards_played": len(player.built_cards),
@@ -618,6 +618,6 @@ class GameEnv:
             print(f"  Coins: {player.coins}")
             print(f"  Production: {player.production}")
             print(f"  Science: {player.science}")
-            print(f"  Military: {player.military_shields} shields")
+            print(f"  Shields: {player.shields}")
             print(f"  Wonder: {player.current_wonder_stage}/{len(player.wonder_stages)} stages")
             print(f"  Cards built: {len(player.built_cards)}")
