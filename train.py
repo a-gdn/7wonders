@@ -408,13 +408,21 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
     # Sort descending by score, then coins
     ranking.sort(key=lambda x: (x[1], x[2]), reverse=True)
     
-    for rank, (pid, _, _) in enumerate(ranking):
+    for rank, (pid, score, _) in enumerate(ranking):
         # Linear interpolation from +1.0 (1st) to -1.0 (Last)
         # For 4 players: 1.0, 0.33, -0.33, -1.0
         if env.num_players > 1:
-            final_reward = 1.0 - (2.0 * rank / (env.num_players - 1))
+            rank_reward = 1.0 - (2.0 * rank / (env.num_players - 1))
         else:
-            final_reward = 1.0
+            rank_reward = 1.0
+            
+        # Mix Rank (Winning) with Normalized Score (Performance)
+        # This helps the value head distinguish between "bad loss" and "good loss"
+        # Max score approx 80 for normalization
+        score_reward = min(score, 80) / 80.0
+        
+        # Shift to 20% Rank / 80% Score to heavily encourage high-scoring strategies (Science)
+        final_reward = (0.2 * rank_reward) + (0.8 * score_reward)
         
         # Assign final reward to the last step
         trajectories[pid]['rewards'][-1] += final_reward
@@ -428,6 +436,8 @@ def arena_battle(env: GameEnv, candidate_agent: PPOAgent, best_agent: PPOAgent, 
     Candidate plays as Player 0, Best plays as others.
     """
     candidate_wins = 0
+    candidate_total_score = 0
+    best_agent_total_score = 0
     
     for _ in range(num_games):
         obs = env.reset()
@@ -451,12 +461,19 @@ def arena_battle(env: GameEnv, candidate_agent: PPOAgent, best_agent: PPOAgent, 
             obs, _, done, _ = env.step(actions)
             
         # Check winner
-        from seven_wonders.scoring import get_winner
+        from seven_wonders.scoring import get_winner, calculate_scores
+        scores = calculate_scores(env)
         winner_id = get_winner(env)
+        
+        candidate_total_score += scores[0]
+        # Average score of opponents (who are all the best_agent)
+        opponents_score_sum = sum(scores[i] for i in range(1, env.num_players))
+        best_agent_total_score += opponents_score_sum / (env.num_players - 1)
+        
         if winner_id == 0:
             candidate_wins += 1
             
-    return candidate_wins / num_games
+    return candidate_wins / num_games, candidate_total_score / num_games, best_agent_total_score / num_games
 
 
 def main():
@@ -574,10 +591,12 @@ def main():
         # 3. Arena Evaluation
         if iteration % EVAL_INTERVAL == 0:
             print("Evaluating against best model...")
-            win_rate = arena_battle(env, agent, best_agent, processor, ARENA_GAMES)
-            print(f"Candidate Win Rate: {win_rate:.2%}")
+            win_rate, cand_score, best_score = arena_battle(env, agent, best_agent, processor, ARENA_GAMES)
+            print(f"Candidate Win Rate: {win_rate:.2%} (Avg Score: {cand_score:.1f} vs {best_score:.1f})")
             
-            if win_rate >= (1 / NUM_PLAYERS) + 0.05:
+            # Dynamic margin: 5% for 2p (AlphaZero standard), scaled down for more players
+            update_margin = 0.1 / NUM_PLAYERS
+            if win_rate >= (1 / NUM_PLAYERS) + update_margin:
                 print("🚀 New Best Model Found! Saving...")
                 best_model.set_weights(model.get_weights())
                 model.save(best_model_path)
