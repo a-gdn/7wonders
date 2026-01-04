@@ -8,6 +8,7 @@ following all official game rules. It is designed to be compatible with RL train
 import json
 import random
 import os
+import copy
 from typing import Dict, List, Tuple, Optional, Set
 from .constants import CardColor, GameState
 from .models import Card, WonderStage
@@ -59,7 +60,7 @@ class GameEnv:
         self.selected_cards: Dict[int, Optional[Card]] = {i: None for i in range(num_players)}
         self.selected_action_types: Dict[int, str] = {i: "discard" for i in range(num_players)}
     
-    def reset(self) -> Dict:
+    def reset(self) -> Dict[int, Dict]:
         """
         Reset the game to initial state.
         
@@ -88,7 +89,7 @@ class GameEnv:
         
         return self.get_observation()
     
-    def step(self, actions: Dict[int, str]) -> Tuple[Dict, float, bool, Dict]:
+    def step(self, actions: Dict[int, str]) -> Tuple[Dict[int, Dict], Dict[int, float], bool, Dict]:
         """
         Execute one game step (one turn).
         
@@ -541,12 +542,12 @@ class GameEnv:
         player.coins = new_total
         return True
     
-    def get_observation(self) -> Dict:
+    def get_observation(self) -> Dict[int, Dict]:
         """
-        Get current game observation for RL training.
+        Get current game observation for all players.
         
         Returns:
-            Dictionary containing game state suitable for RL agent
+            Dictionary mapping player_id -> their specific observation dict
         """
         observation = {
             "current_age": self.current_age,
@@ -566,9 +567,7 @@ class GameEnv:
                 "science": dict(player.science),
                 "shields": player.shields,
                 "wonder_stage_progress": player.current_wonder_stage,
-                "max_wonder_stages": len(player.wonder_stages),
                 "cards_played": len(player.built_cards),
-                "current_hand_size": len(player.current_hand),
                 "current_hand": [c.name for c in player.current_hand],
                 "military_tokens_score": sum(player.military_tokens),
                 "built_card_names": list(player.built_card_names),
@@ -576,7 +575,20 @@ class GameEnv:
             }
             observation["players"].append(player_obs)
         
-        return observation
+        # Create individual views with private information masked
+        player_views = {}
+        for pid in range(self.num_players):
+            # Deepcopy to ensure no shared mutable state in views
+            view = copy.deepcopy(observation)
+            
+            # Mask opponents' private info
+            for p_obs in view["players"]:
+                if p_obs["player_id"] != pid:
+                    p_obs["current_hand"] = []
+                    p_obs["memory_known_cards"] = []
+            player_views[pid] = view
+            
+        return player_views
     
     def get_legal_actions(self, player_id: int) -> List[str]:
         """

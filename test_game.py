@@ -21,7 +21,7 @@ def test_basic_game():
     observation = env.reset()
     
     print(f"Game initialized with {env.num_players} players")
-    print(f"Starting observation: {observation}\n")
+    print(f"Starting observation (Player 0): {observation[0]}\n")
     
     # Play until game is over
     turn_count = 0
@@ -39,8 +39,8 @@ def test_basic_game():
         observation, rewards, done, info = env.step(actions)
         turn_count += 1
         
-        print(f"After turn {turn_count}, current age: {observation['current_age']}, "
-              f"turn: {observation['current_turn']}")
+        print(f"After turn {turn_count}, current age: {observation[0]['current_age']}, "
+              f"turn: {observation[0]['current_turn']}")
         print()
     
     # Game is over - calculate final scores
@@ -121,7 +121,7 @@ def test_rl_integration():
     obs = env.reset()
     
     # Convert to RL format
-    rl_obs = get_rl_observation(obs)
+    rl_obs = get_rl_observation(obs[0])
     print(f"RL observation vector (first 5 components): {rl_obs[:5]}")
     print(f"Full observation vector: {rl_obs}")
     
@@ -163,11 +163,11 @@ def play_human_vs_bots():
     obs = env.reset()
     
     while not env.is_done():
-        print(f"\n{'='*20} AGE {obs['current_age'] + 1} - TURN {obs['current_turn'] + 1} {'='*20}")
+        print(f"\n{'='*20} AGE {obs[0]['current_age'] + 1} - TURN {obs[0]['current_turn'] + 1} {'='*20}")
         
         # Display all players info
         for pid in range(num_players):
-            p_obs = obs["players"][pid]
+            p_obs = obs[0]["players"][pid]
             p_obj = env.players[pid]
             wonder_side = p_obs.get("wonder_side", "day")
             

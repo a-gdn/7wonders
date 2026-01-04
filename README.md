@@ -79,10 +79,8 @@ The `get_observation()` method returns a dictionary representing the global game
             "shields": 0,
             "military_tokens_score": 0,
             "wonder_stage_progress": 0,
-            "max_wonder_stages": 3,
             "cards_played": 0,
             "built_card_names": ["Chantier", ...],
-            "current_hand_size": 7,
             "current_hand": ["Card A", "Card B", ...],  # Cards currently held
             "memory_known_cards": ["Card A", "Card C", ...] # Cards seen in hand this age
         },

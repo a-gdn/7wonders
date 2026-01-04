@@ -48,8 +48,10 @@ class DataProcessor:
         
         self.num_cards = len(self.card_to_id)
         self.action_space_size = self.num_cards * 3
-        # 2 (Global) + 14 (Player) + 3 * num_cards (Hand, Built, Memory)
-        self.input_dim = 16 + 3 * self.num_cards
+        # 2 (Global) + 14 (Player) + (Num_Opponents * 10) + 3 * num_cards
+        # Opponent features: Coins(1) + Shields(1) + Stage(1) + Resources(7) = 10
+        self.num_opponents = env.num_players - 1
+        self.input_dim = 16 + (self.num_opponents * 10) + 3 * self.num_cards
         
     def _build_vocab(self, env: GameEnv):
         """Build vocabulary from all possible cards in the game database."""
@@ -95,21 +97,35 @@ class DataProcessor:
         for s in science:
             features.append(p_obs["science"].get(s, 0) / 5.0)
             
-        # 3. Hand (Multi-hot encoding)
+        # 3. Opponent States (Relative Clockwise)
+        # Include all opponents (Right, Across..., Left)
+        num_players = obs["num_players"]
+        
+        for i in range(1, num_players):
+            nid = (player_id + i) % num_players
+            n_obs = obs["players"][nid]
+            
+            features.append(n_obs["coins"] / 20.0)
+            features.append(n_obs["shields"] / 10.0)
+            features.append(n_obs["wonder_stage_progress"] / 4.0)
+            for r in resources:
+                features.append(n_obs["production"].get(r, 0) / 5.0)
+
+        # 4. Hand (Multi-hot encoding)
         hand_vec = np.zeros(self.num_cards)
         for card_name in p_obs["current_hand"]:
             if card_name in self.card_to_id:
                 hand_vec[self.card_to_id[card_name]] = 1.0
         features.extend(hand_vec)
         
-        # 4. Built Cards (Multi-hot encoding)
+        # 5. Built Cards (Multi-hot encoding)
         built_vec = np.zeros(self.num_cards)
         for card_name in p_obs["built_card_names"]:
             if card_name in self.card_to_id:
                 built_vec[self.card_to_id[card_name]] = 1.0
         features.extend(built_vec)
         
-        # 5. Memory of Circulation (Multi-hot encoding)
+        # 6. Memory of Circulation (Multi-hot encoding)
         mem_vec = np.zeros(self.num_cards)
         for card_name in p_obs.get("memory_known_cards", []):
             if card_name in self.card_to_id:
@@ -310,7 +326,7 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
         # 1. Select actions for all players
         for pid in range(env.num_players):
             # Encode state
-            state_vec = processor.encode_observation(obs, pid)
+            state_vec = processor.encode_observation(obs[pid], pid)
             mask = processor.get_action_mask(env, pid)
             
             # Predict
@@ -347,7 +363,7 @@ def run_self_play_episode(env: GameEnv, agent: PPOAgent, processor: DataProcesso
         final_reward = 1.0 if is_winner else -1.0
         
         # Assign final reward to the last step
-        trajectories[pid]['rewards'][-1] = final_reward
+        trajectories[pid]['rewards'][-1] += final_reward
         
     return trajectories
 
@@ -366,7 +382,7 @@ def arena_battle(env: GameEnv, candidate_agent: PPOAgent, best_agent: PPOAgent, 
         while not done:
             actions = {}
             for pid in range(env.num_players):
-                state_vec = processor.encode_observation(obs, pid)
+                state_vec = processor.encode_observation(obs[pid], pid)
                 mask = processor.get_action_mask(env, pid)
                 
                 if pid == 0:
