@@ -1,32 +1,46 @@
 # 7 Wonders RL Environment
 
-A complete Python implementation of the 7 Wonders board game, designed as a Reinforcement Learning (RL) environment.
+A complete Python implementation of the 7 Wonders board game, designed as a Reinforcement Learning (RL) environment. This project includes scripts to train an AI agent using Proximal Policy Optimization (PPO).
 
-## Overview
+## Features
 
-This project implements the official rules of 7 Wonders for 3-7 players. It supports simultaneous turns, resource management, wonder construction, military conflicts, and full scoring. It includes a PPO training script (`train.py`) demonstrating how to train agents using self-play.
+- **Complete Game Logic:** Implements the official 7 Wonders rules for 3-7 players, including simultaneous turns, resource management, wonder construction, military conflicts, and scoring.
+- **Reinforcement Learning Ready:** Provides a `GameEnv` class compatible with RL training libraries.
+- **PPO Training Scripts:** Includes scripts for training agents using self-play and against random opponents.
+- **Model Evaluation:** A script to evaluate and compare the performance of different trained models.
 
 ## Project Structure
-
-The codebase is organized as a Python package `seven_wonders`.
 
 ```
 .
 ├── seven_wonders/
-│   ├── environment.py      # Main GameEnv class
+│   ├── environment.py      # Main GameEnv class for the 7 Wonders game
+│   ├── models.py           # Data classes for Card and WonderStage
 │   ├── player.py           # Player state definition
 │   ├── resource.py         # Resource trading and cost logic
 │   ├── scoring.py          # Final score calculation
 │   ├── setup.py            # Game initialization and deck management
 │   └── db/                 # JSON databases for cards and wonders
-├── train.py                # PPO Training script (AlphaZero-style)
-├── test_game.py            # Usage examples and testing
+├── train.py                # PPO training script with self-play
+├── train_against_random.py # PPO training script against random opponents
+├── eval.py                 # Script to evaluate trained models
+├── test_game.py            # Usage examples and tests
 └── README.md
 ```
 
 ## Getting Started
 
+### Installation
+
+This project requires TensorFlow for the PPO agent.
+
+```bash
+pip install tensorflow
+```
+
 ### Basic Usage
+
+You can interact with the game environment directly, as shown below:
 
 ```python
 from seven_wonders.environment import GameEnv
@@ -56,6 +70,42 @@ winner = max(final_scores, key=final_scores.get)
 print(f"Game Over. Winner: Player {winner} with {final_scores[winner]} points.")
 ```
 
+## Training the AI
+
+This project provides two main scripts for training the AI agent.
+
+### Training with Self-Play
+
+The `train.py` script uses a curriculum learning approach. The agent starts by playing against random opponents and gradually transitions to playing against a pool of its own past selves.
+
+To start the training:
+```bash
+python train.py
+```
+The trained model will be saved as `ppo_7wonders_latest.keras`.
+
+### Training Against Random Opponents
+
+The `train_against_random.py` script trains the agent exclusively against random opponents. This is useful for establishing whether the model can achieve high scores.
+
+To start this training:
+```bash
+python train_against_random.py
+```
+This script saves the model as `ppo_7wonders_random_only.keras`.
+
+## Evaluating Models
+
+The `eval.py` script is used to compare the performance of different models. It runs a specified number of games and reports the win rates and average scores for each model. By default, it compares:
+- The self-play model (`ppo_7wonders_latest.keras`)
+- The baseline random-trained model (`ppo_7wonders_random_only.keras`)
+- A pure random agent
+
+To run the evaluation:
+```bash
+python eval.py
+```
+
 ## Environment Details
 
 ### Observation Space
@@ -64,8 +114,8 @@ The `get_observation()` method returns a dictionary representing the global game
 
 ```python
 {
-    "current_age": 0,          # 0, 1, 2 (representing Ages I, II, III)
-    "current_turn": 0,         # 0-5 (6 turns per age)
+    "current_age": 0,
+    "current_turn": 0,
     "num_players": 4,
     "discard_pile": ["CardName", ...],
     "players": [
@@ -74,17 +124,16 @@ The `get_observation()` method returns a dictionary representing the global game
             "coins": 3,
             "wonder_name": "Gizeh",
             "wonder_side": "day",
-            "production": { "wood": 0, "stone": 0, "ore": 0, "clay": 0, "glass": 0, "papyrus": 0, "textile": 0 },
-            "science": { "compass": 0, "gear": 0, "tablet": 0 },
+            "production": { "wood": 1, ... },
+            "science": { "compass": 1, ... },
             "shields": 0,
             "military_tokens_score": 0,
             "wonder_stage_progress": 0,
-            "cards_played": 0,
             "built_card_names": ["Chantier", ...],
-            "current_hand": ["Card A", "Card B", ...],  # Cards currently held
-            "memory_known_cards": ["Card A", "Card C", ...] # Cards seen in hand this age
+            "current_hand": ["Card A", "Card B", ...],
+            "memory_known_cards": ["Card A", "Card C", ...]
         },
-        # ... other players
+        // ... other players
     ]
 }
 ```
@@ -94,51 +143,15 @@ The `get_observation()` method returns a dictionary representing the global game
 Actions are strings passed in a dictionary `{player_id: action_string}`.
 
 | Action Type | Format | Description |
-|-------------|--------|-------------|
-| **Build Structure** | `"{CardName}"` | Build the card (e.g., `"Baths"`). Requires resources/coins. |
-| **Build Wonder** | `"wonder_stage_{CardName}"` | Use card as a marker to build next wonder stage. |
-| **Discard** | `"discard_{CardName}"` | Discard card for 3 coins. |
-| **Auto Discard** | `"discard"` | Discards the first available card (fallback). |
+|---|---|---|
+| **Build Structure** | `"{CardName}"` | Build the card (e.g., `"Baths"`). |
+| **Build Wonder** | `"wonder_stage_{CardName}"` | Use a card to build the next wonder stage. |
+| **Discard** | `"discard_{CardName}"` | Discard a card for 3 coins. |
 
-Use `env.get_legal_actions(player_id)` to retrieve valid moves for the current state, which accounts for costs, prerequisites (chains), and duplicates.
+Use `env.get_legal_actions(player_id)` to get a list of valid moves.
 
 ### Rewards
 
-The environment returns `0` rewards during the game steps. 
-- **RL Implementation**: You should implement reward shaping (e.g., delta in VP) or use the final game score.
-- **Scoring**: Use `seven_wonders.scoring.calculate_scores(env)` at the end of the game to get official 7 Wonders scores.
+The base environment returns a reward of `0` at each step. The final score should be used as the primary reward signal.
 
-## Features Implemented
-
-- **Core Mechanics**: 3 Ages, card drafting (hand rotation), simultaneous actions.
-- **Economy**: Resource production, trading with neighbors (2 coins or 1 with trading posts).
-- **Construction**: Resource costs, coin costs, and **free construction chains**.
-- **Wonders**: All base game wonders (A & B sides) with unique effects.
-- **Scoring Categories**:
-  - Military Conflicts (Victory/Defeat tokens)
-  - Treasury (3 coins = 1 VP)
-  - Wonder Stages
-  - Civilian Structures (Blue)
-  - Scientific Structures (Green) - Set and symbol scoring
-  - Commercial Structures (Yellow)
-  - Guilds (Purple) - Neighbor-dependent scoring
-
-## Training
-
-A PPO (Proximal Policy Optimization) training script is included in `train.py`. It demonstrates:
-1.  **DataProcessor**: Converting dictionary observations to tensor representations.
-2.  **Self-Play**: Agents playing against themselves to generate data.
-3.  **Arena**: Evaluating new models against previous best models.
-
-To run training:
-```bash
-python train.py
-```
-
-## Testing
-
-Run the test suite to verify game mechanics and play a human-vs-bot game:
-
-```bash
-python test_game.py
-```
+The `train.py` script uses a shaped reward function, which includes small positive rewards for building structures and negative rewards for discarding, in addition to the final score. This can help guide the agent during training.

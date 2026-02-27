@@ -21,7 +21,8 @@ if len(physical_devices) > 0:
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 NUM_PLAYERS = 4
-ITERATIONS = 2000
+ITERATIONS = 3000
+CURRICULUM_STEPS = 1 # Smooth transition from random to self-play
 
 GAMES_PER_UPDATE = 200  
 EPOCHS_PER_UPDATE = 4  
@@ -31,17 +32,15 @@ GAMMA = 0.99
 GAE_LAMBDA = 0.95      
 CLIP_RATIO = 0.2       
 
-# --- UPDATED: Slightly higher learning rate to unlearn bad habits faster ---
-INITIAL_LEARNING_RATE = 3e-4 
+INITIAL_LEARNING_RATE = 5e-5 
 
-INITIAL_ENTROPY = 0.20       
-FINAL_ENTROPY = 0.10        
+# Increased entropy to force exploration against harder opponents
+INITIAL_ENTROPY = 0.12       
+FINAL_ENTROPY = 0.01      
 MAX_GRAD_NORM = 0.5    
 
-# --- UPDATED: Slowed down pool updates to give Hero time to adapt ---
 POOL_UPDATE_FREQ = 100  
-MAX_POOL_SIZE = 10     
-
+MAX_POOL_SIZE = 100     
 
 # ==========================================
 #             DATA PROCESSOR
@@ -205,6 +204,15 @@ def env_to_dict(env):
         } for p in env.players]
     }
 
+def get_intermediate_reward(action_str):
+    # FIX 1: Scaled down by 10x to prevent agent from ignoring the terminal game score.
+    if action_str.startswith("wonder_stage_"):
+        return 0.010 
+    elif action_str.startswith("discard_"):
+        return -0.005
+    else:
+        return 0.005 
+
 # ==========================================
 #             MAIN LOOP
 # ==========================================
@@ -216,9 +224,9 @@ def main():
     model = create_ppo_model(proc.input_dim, proc.action_space_size)
     agent = PPOAgent(model)
     
-    # Opponent Model
-    opponent_model = create_ppo_model(proc.input_dim, proc.action_space_size)
-    opponent_agent = PPOAgent(opponent_model)
+    # FIX 2: Create a distinct model for each opponent to support heterogeneous self-play
+    opponent_models = [create_ppo_model(proc.input_dim, proc.action_space_size) for _ in range(NUM_PLAYERS - 1)]
+    opponent_agents = [PPOAgent(m) for m in opponent_models]
     
     weights_path = "ppo_7wonders_latest.keras"
     if os.path.exists(weights_path):
@@ -231,7 +239,7 @@ def main():
     os.makedirs("logs/7wonders_ppo", exist_ok=True)
     summary_writer = tf.summary.create_file_writer(log_dir)
 
-    print(f"🚀 PPO Training Started (Phase 2: Fine-Tuning with Fictitious Play) | Input: {proc.input_dim} | Actions: {proc.action_space_size}")
+    print(f"🚀 PPO Training Started | Input: {proc.input_dim} | Actions: {proc.action_space_size}")
 
     for iter_idx in range(1, ITERATIONS + 1):
         start_time = time.time()
@@ -243,22 +251,31 @@ def main():
                 opponent_pool.pop(0) 
         
         # --- SCHEDULE UPDATES ---
-        progress = (iter_idx - 1) / ITERATIONS
+        progress = min((iter_idx - 1) / ITERATIONS, 1.0)
         current_entropy = INITIAL_ENTROPY - progress * (INITIAL_ENTROPY - FINAL_ENTROPY)
         current_entropy_tf = tf.constant(current_entropy, dtype=tf.float32)
         
         current_lr = INITIAL_LEARNING_RATE - progress * (INITIAL_LEARNING_RATE - 1e-5)
         agent.optimizer.learning_rate.assign(current_lr)
+        
+        # --- CURRICULUM LOGIC ---
+        p_self_play = min(iter_idx / CURRICULUM_STEPS, 1.0)
 
         b_states, b_actions, b_logprobs, b_returns, b_advs, b_masks = [], [], [], [], [], []
         batch_scores = []
+        hero_wins = 0 
 
         for _ in range(GAMES_PER_UPDATE):
             env.reset()
             done = False
             
-            opp_weights = random.choice(opponent_pool)
-            opponent_model.set_weights(opp_weights)
+            # Decide if this game uses random opponents or the trained pool
+            use_pool = random.random() < p_self_play
+            if use_pool:
+                # FIX 2 (cont): Sample an independent historical weight for each opponent model
+                for opp_model in opponent_models:
+                    opp_weights = random.choice(opponent_pool)
+                    opp_model.set_weights(opp_weights)
             
             hero_traj = {"states": [], "actions": [], "logprobs": [], "rewards": [], "values": [], "masks": []} 
             
@@ -269,41 +286,52 @@ def main():
                 for pid in range(NUM_PLAYERS):
                     state = proc.encode_observation(obs, pid, env.get_legal_actions(pid))
                     mask = proc.get_action_mask(env, pid)
-                    state_tf = tf.convert_to_tensor(state[None, :], dtype=tf.float32)
-                    mask_tf = tf.convert_to_tensor(mask[None, :], dtype=tf.float32)
                     
-                    if pid == 0:
+                    if pid == 0: # Hero
+                        state_tf = tf.convert_to_tensor(state[None, :], dtype=tf.float32)
+                        mask_tf = tf.convert_to_tensor(mask[None, :], dtype=tf.float32)
                         act_idx, lp, val = agent.get_action_and_value(state_tf, mask_tf)
-                        actions_str[pid] = proc.index_to_action(act_idx.numpy())
+                        chosen_action = proc.index_to_action(act_idx.numpy())
+                        actions_str[pid] = chosen_action
                         
                         hero_traj["states"].append(state)
                         hero_traj["actions"].append(act_idx.numpy())
                         hero_traj["logprobs"].append(lp.numpy())
                         hero_traj["values"].append(val.numpy())
                         hero_traj["masks"].append(mask)
-                        hero_traj["rewards"].append(0.01) 
-                    else:
-                        act_idx, _, _ = opponent_agent.get_action_and_value(state_tf, mask_tf)
-                        actions_str[pid] = proc.index_to_action(act_idx.numpy())
+                        
+                        step_reward = get_intermediate_reward(chosen_action)
+                        hero_traj["rewards"].append(step_reward) 
+                    else: # Opponents
+                        if use_pool:
+                            opp_idx = pid - 1 # Opponent models are 0-indexed (0, 1, 2)
+                            state_tf = tf.convert_to_tensor(state[None, :], dtype=tf.float32)
+                            mask_tf = tf.convert_to_tensor(mask[None, :], dtype=tf.float32)
+                            act_idx, _, _ = opponent_agents[opp_idx].get_action_and_value(state_tf, mask_tf)
+                            actions_str[pid] = proc.index_to_action(act_idx.numpy())
+                        else:
+                            # Random legal action
+                            valid_indices = np.where(mask == 1.0)[0]
+                            random_act_idx = np.random.choice(valid_indices)
+                            actions_str[pid] = proc.index_to_action(random_act_idx)
 
                 _, _, done, _ = env.step(actions_str)
                     
             scores = calculate_scores(env)
             batch_scores.append(scores[0]) 
             
-            # --- UPDATED: Softer Rank Penalties & Higher Absolute Score Reward ---
             scores_list = sorted(list(scores.values()), reverse=True)
             hero_rank = scores_list.index(scores[0]) 
             
-            # Softer punishment for coming in 3rd/4th while exploring
-            rank_rewards = [1.0, 0.0, -0.25, -0.5]
+            if hero_rank == 0:
+                hero_wins += 1
+            
+            rank_rewards = [1.0, 0.5, 0.0, -0.5]
             rank_bonus = rank_rewards[hero_rank]
             
-            # Increased weight of the absolute score (divided by 10 instead of 20)
-            absolute_reward = scores[0] / 10.0 
-            
+            # FIX 3: With tiny intermediate rewards, this terminal reward correctly dominates the training signal
+            absolute_reward = scores[0] / 50.0 
             hero_traj["rewards"][-1] += (absolute_reward + rank_bonus)
-            # ---------------------------------------------------------------------
             
             rewards = np.array(hero_traj["rewards"])
             values = np.array(hero_traj["values"])
@@ -345,15 +373,17 @@ def main():
                 l_e.append(pe.numpy())
 
         avg_score, max_score_batch = np.mean(batch_scores), np.max(batch_scores)
+        win_rate = (hero_wins / GAMES_PER_UPDATE) * 100
+
         with summary_writer.as_default():
             tf.summary.scalar('Game/Hero_Avg_Score', avg_score, step=iter_idx)
             tf.summary.scalar('Game/Hero_Max_Score', max_score_batch, step=iter_idx)
+            tf.summary.scalar('Game/Win_Rate', win_rate, step=iter_idx)
+            tf.summary.scalar('Curriculum/Self_Play_Ratio', p_self_play, step=iter_idx)
             tf.summary.scalar('Metrics/Entropy_Actual', np.mean(l_e), step=iter_idx)
-            tf.summary.scalar('Hyperparams/Entropy_Target', current_entropy, step=iter_idx)
-            tf.summary.scalar('Hyperparams/Learning_Rate', current_lr, step=iter_idx)
 
-        if (iter_idx % 20 == 0 and iter_idx <= 100) or (iter_idx % 50 == 0 and iter_idx > 100): 
-            print(f"Iter {iter_idx:3d} | Hero Avg Score: {avg_score:4.1f} | Max: {max_score_batch:3.0f} | Entropy Target: {current_entropy:5.3f} | Actual: {np.mean(l_e):4.2f} | Time: {time.time()-start_time:.1f}s")
+        if iter_idx % 20 == 0: 
+            print(f"Iter {iter_idx:3d} | Win Rate: {win_rate:5.1f}% | Score: {avg_score:4.1f} | SP_Ratio: {p_self_play:4.2f} | Entropy: {np.mean(l_e):4.2f} | Time: {time.time()-start_time:.1f}s")
         
         if iter_idx % 20 == 0 or iter_idx == ITERATIONS: 
             model.save("ppo_7wonders_latest.keras")

@@ -39,3 +39,4 @@ ENV/
 # IDEs
 .vscode/
 .idea/
+logs/
