@@ -78,6 +78,7 @@ class GameEnv:
         self.edifice_pawns_on_card: Dict[int, int] = {}  # Maps age to # pawns on the edifice
         self.edifice_pawn_box: Dict[int, int] = {}  # Maps age to # pawns in box (unused)
         self.remaining_edifice_cards: Dict[int, List[Dict]] = {}  # Maps age to unused edifice cards
+        self.edifice_completed: Dict[int, bool] = {}  # Tracks which edifices were successfully completed
         
         # Cities expansion state (only if enabled)
         self.pending_coin_losses: Dict[int, int] = {}  # Maps player_id to coins lost this turn
@@ -117,6 +118,10 @@ class GameEnv:
         # Setup Edifice expansion if enabled
         if "edifice" in self.expansions:
             self._setup_edifices()
+
+        # Setup Cities expansion if enabled
+        if "cities" in self.expansions:
+            self._setup_cities()
 
         # Deal initial hands for Age I (pass expansions for card count)
         setup.deal_age_hand(self.players, self.decks, 0, self.expansions)
@@ -791,11 +796,24 @@ class GameEnv:
                 self.edifice_pawns_on_card[age] = 0
                 self.edifice_pawn_box[age] = pawns_per_age
         
+        # Initialize edifice completion tracking
+        self.edifice_completed = {1: False, 2: False, 3: False}
+        
         # Initialize player edifice state
         for player in self.players:
             player.edifice_participation_pawns = {1: 0, 2: 0, 3: 0}
             player.edifice_debt_tokens = []
             player.participated_in_edifice = {1: False, 2: False, 3: False}
+    
+    def _setup_cities(self):
+        """Setup Cities expansion: ensure all players have cities fields properly initialized."""
+        for player in self.players:
+            # Ensure cities_debt_tokens is a list
+            if not isinstance(player.cities_debt_tokens, list):
+                player.cities_debt_tokens = []
+            # Ensure diplomacy_tokens is an int
+            if not isinstance(player.diplomacy_tokens, int):
+                player.diplomacy_tokens = 0
     
     def _can_participate_in_edifice(self, player: PlayerCity) -> bool:
         """
@@ -911,9 +929,11 @@ class GameEnv:
         
         if pawns_remaining == 0:
             # Edifice completed successfully - distribute rewards
+            self.edifice_completed[age_idx] = True
             self._apply_edifice_reward(edifice)
         else:
             # Edifice construction failed - apply penalties
+            self.edifice_completed[age_idx] = False
             self._apply_edifice_penalty(edifice, age_idx)
     
     def _apply_edifice_reward(self, edifice: Dict):
@@ -1096,8 +1116,20 @@ class GameEnv:
             # Add Cities expansion state if enabled
             if "cities" in self.expansions:
                 player_obs["diplomacy_tokens"] = player.diplomacy_tokens
-                player_obs["cities_debt_tokens"] = list(player.cities_debt_tokens)
-                player_obs["cities_debt_value"] = sum(player.cities_debt_tokens)
+                # Ensure cities_debt_tokens is a proper list before converting/summing
+                if isinstance(player.cities_debt_tokens, list):
+                    player_obs["cities_debt_tokens"] = list(player.cities_debt_tokens)
+                    # Flatten if it contains nested lists (defensive)
+                    flattened = []
+                    for item in player.cities_debt_tokens:
+                        if isinstance(item, list):
+                            flattened.extend(item)
+                        else:
+                            flattened.append(item)
+                    player_obs["cities_debt_value"] = sum(flattened) if flattened else 0
+                else:
+                    player_obs["cities_debt_tokens"] = []
+                    player_obs["cities_debt_value"] = 0
             
             observation["players"].append(player_obs)
         

@@ -55,8 +55,8 @@ class DataProcessor:
         self.num_wonders = len(self.wonder_to_id)
         self.action_space_size = self.num_cards * 3
         
-        self.global_dim = 2 
-        self.player_feat_dim = self.num_wonders + 16 + self.num_cards
+        self.global_dim = 2 + 6  # +6 for edifice state (2 features per age × 3 ages)
+        self.player_feat_dim = self.num_wonders + 18 + self.num_cards  # base + science + expansion features
         self.private_dim = 3 * self.num_cards 
         self.input_dim = self.global_dim + (env.num_players * self.player_feat_dim) + self.private_dim
 
@@ -72,6 +72,20 @@ class DataProcessor:
         features = []
         features.append(obs["current_age"] / 3.0)
         features.append(obs["current_turn"] / 6.0)
+        
+        # Add edifice state (selected projects and completion)
+        edifice_state = obs.get("edifice_state", {})
+        for age in [1, 2, 3]:
+            proj_info = edifice_state.get(age, {})
+            project_name = proj_info.get("project_name")
+            is_built = 1.0 if proj_info.get("built", False) else 0.0
+            # Use card_to_id if project is a known card, else use hash
+            if project_name and project_name in self.card_to_id:
+                proj_encoding = self.card_to_id[project_name] / max(self.num_cards, 1)
+            else:
+                proj_encoding = 0.0 if not project_name else (hash(project_name) % self.num_cards) / max(self.num_cards, 1)
+            features.append(proj_encoding)
+            features.append(is_built)
         
         for i in range(NUM_PLAYERS):
             target_pid = (player_id + i) % NUM_PLAYERS
@@ -96,7 +110,12 @@ class DataProcessor:
             features.extend([
                 sci.get("compass", 0)/4.0, sci.get("gear", 0)/4.0, sci.get("tablet", 0)/4.0, 
                 min(1.0, p["shields"]/15.0), 
-                min(1.0, (p["military_tokens_score"] + 10) / 30.0) 
+                min(1.0, (p["military_tokens_score"] + 10) / 30.0),
+                min(1.0, p["diplomacy_tokens"] / 5.0),
+                min(1.0, max(p["debt_tokens"], -10) / 10.0),
+                1.0 if p["edifice_participated"].get(1, False) else 0.0,
+                1.0 if p["edifice_participated"].get(2, False) else 0.0,
+                1.0 if p["edifice_participated"].get(3, False) else 0.0
             ])
             built = np.zeros(self.num_cards)
             for c in p["built_card_names"]:
@@ -192,15 +211,41 @@ class PPOAgent:
         self.optimizer.apply_gradients(zip(grads, self.model.trainable_variables))
         return policy_loss, value_loss, entropy
 
+def _safe_sum_debt(debt_list):
+    """Flatten and sum debt tokens, handling nested lists."""
+    if not debt_list:
+        return 0
+    total = 0
+    for item in debt_list:
+        if isinstance(item, list):
+            total += sum(item)
+        else:
+            total += item
+    return total
+
 def env_to_dict(env):
+    edifice_state = {}
+    if hasattr(env, 'active_edifices'):
+        for age in [1, 2, 3]:
+            edifice = getattr(env, 'active_edifices', {}).get(age)
+            complete = getattr(env, 'edifice_completed', {}).get(age, False)
+            edifice_state[age] = {
+                "project_name": edifice.get("name") if edifice else None,
+                "built": complete
+            }
+    
     return {
         "current_age": env.current_age, "current_turn": env.current_turn,
+        "edifice_state": edifice_state,
         "players": [{
             "wonder_name": p.wonder_name, "wonder_side": p.wonder_side, "wonder_stage_progress": p.current_wonder_stage,
             "coins": p.coins, "production": p.production, "science": p.science, "shields": sum(p.military_tokens),
             "military_tokens_score": sum(p.military_tokens), "built_card_names": [c.name for c in p.built_cards],
             "current_hand": [c.name for c in p.current_hand],
-            "memory_known_cards": [c if isinstance(c, str) else c.name for c in p.memory_known_cards]
+            "memory_known_cards": [c if isinstance(c, str) else c.name for c in p.memory_known_cards],
+            "diplomacy_tokens": getattr(p, "diplomacy_tokens", 0),
+            "debt_tokens": _safe_sum_debt(getattr(p, "edifice_debt_tokens", [])) + _safe_sum_debt(getattr(p, "cities_debt_tokens", [])),
+            "edifice_participated": getattr(p, "participated_in_edifice", {1: False, 2: False, 3: False})
         } for p in env.players]
     }
 

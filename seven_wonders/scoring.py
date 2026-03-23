@@ -51,7 +51,18 @@ def calculate_scores(env) -> Dict[int, int]:
         
         # 10. Debt tokens (Cities and Edifice expansions)
         # Cities debt tokens (-1 each)
-        score += sum(player.cities_debt_tokens)
+        if isinstance(player.cities_debt_tokens, list):
+            # Flatten if it contains nested lists (defensive)
+            cities_debt = []
+            for item in player.cities_debt_tokens:
+                if isinstance(item, list):
+                    cities_debt.extend(item)
+                else:
+                    cities_debt.append(item)
+            score += sum(cities_debt) if cities_debt else 0
+        else:
+            score += 0
+        
         # Edifice debt tokens (-2, -3, or -5)
         score += sum(player.edifice_debt_tokens)
         
