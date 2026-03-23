@@ -36,48 +36,78 @@ def setup_players(num_players: int, wonder_data: List[Dict]) -> List[PlayerCity]
     return players
 
 def setup_decks(num_players: int, cards_data: List[Dict]) -> Dict[int, List[Card]]:
-    """Filter, create Card objects, and shuffle age decks."""
-    # Separate candidates by age/type
+    """
+    Filter, create Card objects, and shuffle age decks.
+    
+    For Cities expansion: separates Black cards, selects N per age,
+    selects Purple cards N+2, and includes them in the respective age decks.
+    
+    Deck composition per age:
+    - Base game: 7 * num_players cards per age
+    - Cities expansion: 7 * num_players cards + N black cards where N = num_players
+    """
+    # Separate cards by type
     candidates = {1: [], 2: [], 3: []}
+    black_cards = {1: [], 2: [], 3: []}
     guild_candidates = []
+    
+    # Determine if Cities expansion is being used by checking for black cards
+    has_cities = any(card.get("color") == "black" for card in cards_data)
 
     for data in cards_data:
         if data["color"] == "purple":
             guild_candidates.append(data)
+        elif data["color"] == "black":
+            # Cities expansion: separate black cards by age
+            age = data.get("age", 1)
+            black_cards[age].append(data)
         elif data.get("player_requirement", 3) <= num_players:
-            # Safely get age because edifice might be missing or Cities may have misformatted
             age = data.get("age", 1)
             candidates[age].append(data)
 
     decks = {1: [], 2: [], 3: []}
     
-    # Calculate target size based on base rules (if we implement full cities it would be 8 * num_players)
-    target_size = 7 * num_players
+    # Base deck size is always 7 cards per player
+    base_target_size = 7 * num_players
 
-    # Age 1 and 2
+    # Age 1 and 2: Select base cards + optionally add black cards
     for age in [1, 2]:
         available = candidates[age]
-        if len(available) < target_size:
-            raise ValueError(f"Not enough cards for Age {age}. Required: {target_size}, Found: {len(available)}")
-        # Randomly sample if we have more cards than needed (e.g. from expansions)
-        selected = random.sample(available, target_size) if len(available) > target_size else available
+        if len(available) < base_target_size:
+            raise ValueError(f"Not enough base cards for Age {age}. Required: {base_target_size}, Found: {len(available)}")
+        
+        # Randomly sample base cards (exactly 7 per player)
+        selected = random.sample(available, base_target_size) if len(available) > base_target_size else available
         decks[age] = [create_card_from_data(d) for d in selected]
+        
+        # Cities expansion: add black cards for this age (N black cards where N = num_players)
+        if has_cities and black_cards[age]:
+            num_black = min(num_players, len(black_cards[age]))
+            selected_black = random.sample(black_cards[age], num_black)
+            decks[age].extend([create_card_from_data(d) for d in selected_black])
 
-    # Age 3: Guilds + Regular
+    # Age 3: Guilds + Regular cards + Black cards
     # 1. Select Guilds (N + 2)
     num_guilds = num_players + 2
     if len(guild_candidates) < num_guilds:
         raise ValueError(f"Not enough Guild cards. Required: {num_guilds}, Found: {len(guild_candidates)}")
     selected_guilds = random.sample(guild_candidates, num_guilds)
     
-    # 2. Fill remainder with Age 3 cards
-    remaining_slots = target_size - len(selected_guilds)
+    # 2. Select base Age 3 cards (to make up base_target_size cards)
+    remaining_slots = base_target_size - len(selected_guilds)
     available_age3 = candidates[3]
+    
     if len(available_age3) < remaining_slots:
         raise ValueError(f"Not enough regular cards for Age 3. Required: {remaining_slots}, Found: {len(available_age3)}")
     selected_age3 = random.sample(available_age3, remaining_slots) if len(available_age3) > remaining_slots else available_age3
     
     decks[3] = [create_card_from_data(d) for d in selected_guilds + selected_age3]
+    
+    # 3. Cities expansion: add black cards to Age 3
+    if has_cities and black_cards[3]:
+        num_black_age3 = min(num_players, len(black_cards[3]))
+        selected_black_age3 = random.sample(black_cards[3], num_black_age3)
+        decks[3].extend([create_card_from_data(d) for d in selected_black_age3])
 
     for age in decks:
         random.shuffle(decks[age])
@@ -96,20 +126,26 @@ def create_card_from_data(card_data: Dict) -> Card:
         player_requirement=card_data.get("player_requirement", 3)
     )
 
-def deal_age_hand(players: list, decks: dict, current_age: int):
+def deal_age_hand(players: list, decks: dict, current_age: int, expansions: List[str] = None):
     """
-    Deals 7 cards to each player for the current age.
+    Deals cards to each player for the current age.
     
     Args:
         players: List of PlayerCity objects
         decks: Dictionary of age decks {1: [...], 2: [...], 3: [...]}
         current_age: The current age (0, 1, or 2)
+        expansions: List of enabled expansions (cities, edifice, etc)
     """
+    if expansions is None:
+        expansions = []
+    
     # age_deck uses 1-based indexing from setup_decks (1, 2, 3)
     age_deck = decks[current_age + 1]
     
+    # Cities expansion: 8 cards per age; Base game: 7 cards per age
+    hand_size = 8 if "cities" in expansions else 7
+    
     for player in players:
-        # Per rules, each player starts an age with 7 cards
-        # We take cards from the end of the shuffled list
-        hand_size = min(7, len(age_deck))
-        player.current_hand = [age_deck.pop() for _ in range(hand_size)]
+        # Deal cards from the end of the shuffled list
+        num_cards = min(hand_size, len(age_deck))
+        player.current_hand = [age_deck.pop() for _ in range(num_cards)]
