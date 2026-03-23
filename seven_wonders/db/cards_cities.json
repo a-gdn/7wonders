@@ -1,0 +1,462 @@
+[
+  {
+    "name": "Cache d'opium",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "coins": 3, "others_lose_coins": 1 }
+  },
+  {
+    "name": "Cellules",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp_per_shield": 2 }
+  },
+  {
+    "name": "Tripot",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "coins": 6, "neighbors_gain_coins": 1 }
+  },
+  {
+    "name": "Douanes",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 4, "others_gain_coins": 1 }
+  },
+  {
+    "name": "Résidence",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "clay": 1
+    },
+    "chain_from": null,
+    "effect": { "diplomacy": 1, "vp": 1 }
+  },
+  {
+    "name": "Planque",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "vp": 2, "others_lose_coins": 1 }
+  },
+  {
+    "name": "Portes de la ville",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 1,
+      "wood": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 4 }
+  },
+  {
+    "name": "Campement pillard",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "immediate_military_tokens": [1], "neighbors_debt_tokens": [-1] }
+  },
+  {
+    "name": "Milice",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 2
+    },
+    "chain_from": null,
+    "effect": { "shield": 2 }
+  },
+  {
+    "name": "Entrepot secret",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 2
+    },
+    "chain_from": null,
+    "effect": { "production_choice_daily": { "options": ["wood", "stone", "ore", "clay", "glass", "papyrus", "textile"], "choice_count": 1 } }
+  },
+  {
+    "name": "Pigeonnier",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 1,
+      "ore": 1
+    },
+    "chain_from": null,
+    "effect": { "end_game_science_copy_neighbor": 1 }
+  },
+  {
+    "name": "Cache des contrebandiers",
+    "age": 1,
+    "color": "black",
+    "cost": {},
+    "chain_from": null,
+    "effect": { "trading_discount": { "target": "both", "discount": 1 } }
+  },
+  {
+    "name": "Quai clandestin ouest",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 1
+    },
+    "chain_from": null,
+    "effect": { "trading_discount": { "target": "left", "discount": 1 } }
+  },
+  {
+    "name": "Quai clandestin est",
+    "age": 1,
+    "color": "black",
+    "cost": {
+      "coins": 1
+    },
+    "chain_from": null,
+    "effect": { "trading_discount": { "target": "right", "discount": 1 } }
+  },
+  {
+    "name": "Mercenaires",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 4,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "shield": 3 }
+  },
+  {
+    "name": "Geoles",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "wood": 1,
+      "ore": 1
+    },
+    "chain_from": null,
+    "effect": { "vp_per_military_token_value_3": 3 }
+  },
+  {
+    "name": "Sepulcre",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "stone": 1,
+      "textile": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 4, "others_lose_coins_per_military_token": 1 }
+  },
+  {
+    "name": "Cabinet d'espions",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "stone": 1,
+      "clay": 1
+    },
+    "chain_from": null,
+    "effect": { "end_game_science_copy_neighbor": 1 }
+  },
+  {
+    "name": "Cabinet d'architectes",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 2, "free_wonder_stages_resources": true }
+  },
+  {
+    "name": "Tabularium",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "wood": 1,
+      "ore": 1,
+      "textile": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 6 }
+  },
+  {
+    "name": "Bourse",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "wood": 1,
+      "ore": 1,
+      "textile": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 6, "others_gain_coins": 2 }
+  },
+  {
+    "name": "Maison de jeu",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 1
+    },
+    "chain_from": null,
+    "effect": { "coins": 9, "neighbors_gain_coins": 2 }
+  },
+  {
+    "name": "Redoute pillarde",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 1,
+      "ore": 1,
+      "clay": 1
+    },
+    "chain_from": null,
+    "effect": { "immediate_military_tokens": [3], "neighbors_debt_tokens": [-1] }
+  },
+  {
+    "name": "Marché noir",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "ore": 1,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "production_choice_missing_resource": 1 }
+  },
+  {
+    "name": "Repaire",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "wood": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 3, "others_lose_coins": 2 }
+  },
+  {
+    "name": "Consulat",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "clay": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 2, "diplomacy": 1 }
+  },
+  {
+    "name": "Office des faussaires",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "coins": 2
+    },
+    "chain_from": null,
+    "effect": { "action": "play_from_discard_end_of_turn" }
+  },
+  {
+    "name": "Fumerie d'opium",
+    "age": 2,
+    "color": "black",
+    "cost": {
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "coins": 4, "others_lose_coins": 3 }
+  },
+  {
+    "name": "Reseau cladestin",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "stone": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp_per_black_card": 1, "coins_per_black_card": 1 }
+  },
+  {
+    "name": "Ambassade",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "stone": 1,
+      "papyrus": 1,
+      "textile": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 3, "diplomacy": 1 }
+  },
+  {
+    "name": "Chambre des batisseurs",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "wood": 1,
+      "clay": 1,
+      "glass": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 4, "others_lose_coins_per_wonder_stage": 1 }
+  },
+  {
+    "name": "Marché aux esclaves",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "wood": 2,
+      "ore": 2
+    },
+    "chain_from": null,
+    "effect": { "coins_per_military_token": 1, "vp": 1 }
+  },
+  {
+    "name": "Cénopathe",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "clay": 2,
+      "stone": 1,
+      "glass": 1,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 5, "others_lose_coins_per_military_token": 1 }
+  },
+  {
+    "name": "Bouillerie d'opium",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "wood": 1,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "coins": 5, "others_lose_coins": 5 }
+  },
+  {
+    "name": "Contingent",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "coins": 5,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "shield": 5 }
+  },
+  {
+    "name": "Confrerie",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "wood": 2,
+      "ore": 1,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 4, "others_lose_coins": 3 }
+  },
+  {
+    "name": "Prison",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "ore": 2,
+      "clay": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp_per_military_token_value_5": 4 }
+  },
+  {
+    "name": "Fortin pillard",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "stone": 2,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "immediate_military_tokens": [5], "neighbors_debt_tokens": [-1] }
+  },
+  {
+    "name": "Capitole",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "coins": 2,
+      "stone": 2,
+      "clay": 2,
+      "glass": 1,
+      "papyrus": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 8 }
+  },
+  {
+    "name": "Hotel des monnaies",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "wood": 2,
+      "clay": 1,
+      "glass": 1,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "vp": 8, "others_gain_coins": 3 }
+  },
+  {
+    "name": "Memorial",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "stone": 1,
+      "wood": 1,
+      "textile": 1
+    },
+    "chain_from": null,
+    "effect": { "coins_per_military_loss_token": 2, "discard_military_loss_tokens": true }
+  },
+  {
+    "name": "Chambre des confessions",
+    "age": 3,
+    "color": "black",
+    "cost": {
+      "coins": 3,
+      "ore": 2,
+      "glass": 1
+    },
+    "chain_from": null,
+    "effect": { "end_game_science_copy_neighbor": 1 }
+  }
+]

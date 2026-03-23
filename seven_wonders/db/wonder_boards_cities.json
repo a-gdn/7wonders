@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Byzantium",
+    "start_resource": "stone",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "ore": 1, "clay": 1 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "wood": 2, "papyrus": 1 },
+          "effect": { "vp": 4, "diplomacy": 1 }
+        },
+        {
+          "stage": 3,
+          "cost": { "clay": 2, "glass": 1, "textile": 1 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "wood": 1, "ore": 1, "papyrus": 1},
+          "effect": { "vp": 4, "diplomacy": 1 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 2, "glass": 1, "textile": 1 },
+          "effect": { "vp": 6, "diplomacy": 1 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Petra",
+    "start_resource": "clay",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "wood": 1, "stone": 1},
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "coins": 5 },
+          "effect": { "vp": 7 }
+        },
+        {
+          "stage": 3,
+          "cost": { "stone": 2, "wood": 1, "papyrus": 1},
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "ore": 2, "clay": 2 },
+          "effect": { "vp": 3, "others_lose_coins": 2 }
+        },
+        {
+          "stage": 2,
+          "cost": { "coins": 10},
+          "effect": { "vp": 14 }
+        }
+      ]
+    }
+  }
+]

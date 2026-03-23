@@ -1,0 +1,138 @@
+[
+    {
+        "name": "Quartier des artisans",
+        "age": 1,
+        "cost": {
+            "coins": 2
+        },
+        "chain_from": null,
+        "reward": { "vp_per_color": { "colors": ["brown", "grey"], "vp": 2 } },
+        "penalty": { "discard_card_color": "yellow", "count": 1 }
+    },
+    {
+        "name": "Belvedere",
+        "age": 1,
+        "cost": {
+            "coins": 1
+        },
+        "reward": { "vp_per_wonder_stage": 1 },
+        "penalty": { "discard_card_color": "brown", "count": 1 }
+    },
+    {
+        "name": "Enceinte",
+        "age": 1,
+        "cost": {
+            "coins": 2
+        },
+        "reward": { "shield": 1 },
+        "penalty": { "discard_card_color": "grey", "count": 1 }
+    },
+    {
+        "name": "Atelier monetaire",
+        "age": 1,
+        "cost": {
+            "coins": 1
+        },
+        "reward": { "coins": 4 },
+        "penalty": { "coins": -2 }
+    },
+    {
+        "name": "Avant-poste",
+        "age": 1,
+        "cost": {
+            "coins": 1
+        },
+        "reward": { "immediate_military_tokens": [3] },
+        "penalty": { "discard_card_color": "red", "count": 1 }
+    },
+    {
+        "name": "Amphitheatre",
+        "age": 2,
+        "cost": {
+            "coins": 3
+        },
+        "reward": { "vp_per_color": { "colors": ["blue"], "vp": 1 } },
+        "penalty": { "discard_card_color": "grey", "count": 1 }
+    },
+    {
+        "name": "Manufacture",
+        "age": 2,
+        "cost": {
+            "coins": 3
+        },
+        "reward": { "production_choice": { "options": ["glass", "papyrus", "textile"], "choice_count": 1 } },
+        "penalty": { "discard_card_color": "brown", "count": 1 }
+    },
+    {
+        "name": "Hotel des ventes",
+        "age": 2,
+        "cost": {
+            "coins": 2
+        },
+        "reward": { "coins": 7 },
+        "penalty": { "coins": -5 }
+    },
+    {
+        "name": "Port fluvial",
+        "age": 2,
+        "cost": {
+            "coins": 3
+        },
+        "reward": { "production_choice": { "options": ["wood", "stone", "ore", "clay"], "choice_count": 1 } },
+        "penalty": { "discard_card_color": "blue", "count": 1 }
+    },
+    {
+        "name": "Camp d'entrainement",
+        "age": 2,
+        "cost": {
+            "coins": 2
+        },
+        "reward": { "immediate_military_tokens": [5] },
+        "penalty": { "discard_card_color": "red", "count": 1 }
+    },
+    {
+        "name": "Ecole militaire",
+        "age": 3,
+        "cost": {
+            "coins": 5
+        },
+        "reward": { "immediate_military_tokens": [5], "discard_military_loss_tokens": true },
+        "penalty": { "discard_card_color": "red", "count": 1 }
+    },
+    {
+        "name": "Archives",
+        "age": 3,
+        "cost": {
+            "coins": 5
+        },
+        "reward": { "vp_per_different_color": 1 },
+        "penalty": { "discard_card_color": "blue", "count": 1 }
+    },
+    {
+        "name": "Reserve d'or",
+        "age": 3,
+        "cost": {
+            "coins": 3
+        },
+        "reward": { "coins": 15 },
+        "penalty": { "coins": -9 }
+    },
+    {
+        "name": "Double enceinte",
+        "age": 3,
+        "cost": {
+            "coins": 5
+        },
+        "reward": { "shield": 2 },
+        "penalty": { "discard_military_victory_tokens": 2 }
+    },
+    {
+        "name": "Agora",
+        "age": 3,
+        "cost": {
+            "coins": 6
+        },
+        "reward": { "copy_purple_card_effect": 1 },
+        "penalty": { "discard_card_color": "green", "count": 1 }
+    }
+]

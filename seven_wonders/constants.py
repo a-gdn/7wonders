@@ -8,6 +8,7 @@ class CardColor(Enum):
     RED = "red"
     GREEN = "green"
     PURPLE = "purple"
+    BLACK = "black"
 
 class ScienceSymbol(Enum):
     COMPASS = "compass"

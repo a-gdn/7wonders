@@ -44,10 +44,14 @@ def setup_decks(num_players: int, cards_data: List[Dict]) -> Dict[int, List[Card
     for data in cards_data:
         if data["color"] == "purple":
             guild_candidates.append(data)
-        elif data["player_requirement"] <= num_players:
-            candidates[data["age"]].append(data)
+        elif data.get("player_requirement", 3) <= num_players:
+            # Safely get age because edifice might be missing or Cities may have misformatted
+            age = data.get("age", 1)
+            candidates[age].append(data)
 
     decks = {1: [], 2: [], 3: []}
+    
+    # Calculate target size based on base rules (if we implement full cities it would be 8 * num_players)
     target_size = 7 * num_players
 
     # Age 1 and 2
@@ -89,7 +93,7 @@ def create_card_from_data(card_data: Dict) -> Card:
         cost=card_data.get("cost", {}),
         chain_from=card_data.get("chain_from"),
         effect=card_data.get("effect", {}),
-        player_requirement=card_data["player_requirement"]
+        player_requirement=card_data.get("player_requirement", 3)
     )
 
 def deal_age_hand(players: list, decks: dict, current_age: int):

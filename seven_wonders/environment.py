@@ -25,13 +25,14 @@ class GameEnv:
     Supports 3-7 players.
     """
     
-    def __init__(self, num_players: int = 4, random_seed: Optional[int] = None):
+    def __init__(self, num_players: int = 4, random_seed: Optional[int] = None, expansions: Optional[List[str]] = None):
         """
         Initialize the game environment.
         
         Args:
             num_players: Number of players (3-7)
             random_seed: Optional seed for reproducibility
+            expansions: List of expansions to enable, defaults to ["cities", "edifice"]
         """
         if not 3 <= num_players <= 7:
             raise ValueError(f"Number of players must be between 3 and 7, got {num_players}")
@@ -39,10 +40,30 @@ class GameEnv:
         self.num_players = num_players
         if random_seed is not None:
             random.seed(random_seed)
+            
+        if expansions is None:
+            expansions = ["cities", "edifice"]
+        self.expansions = expansions
         
         # Load game data
         self.cards_data = setup.load_json("db/cards.json")
         self.wonder_data = setup.load_json("db/wonder_boards.json")
+        
+        if "cities" in self.expansions:
+            try:
+                self.cards_data.extend(setup.load_json("db/cards_cities.json"))
+                self.wonder_data.extend(setup.load_json("db/wonder_boards_cities.json"))
+            except FileNotFoundError:
+                pass
+                
+        if "edifice" in self.expansions:
+            try:
+                self.wonder_data.extend(setup.load_json("db/wonder_boards_edifice.json"))
+                self.edifice_data = setup.load_json("db/projects_edifice.json")
+            except FileNotFoundError:
+                self.edifice_data = []
+        else:
+            self.edifice_data = []
 
         # Game state
         self.state = GameState.SETUP

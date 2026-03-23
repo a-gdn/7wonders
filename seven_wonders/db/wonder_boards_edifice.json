@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Carthage",
+    "start_resource": "ore",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "stone": 2 },
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 2, "papyrus": 1 },
+          "effect": { "options": [{"vp": 2, "coins": 7}, {"vp": 2, "shield": 1}], "choice_count": 1 }
+        },
+        {
+          "stage": 3,
+          "cost": { "clay": 3},
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "ore": 3, "papyrus": 1 },
+          "effect": { "options": [{"vp": 4, "coins": 7}, {"shield": 2}], "choice_count": 1 }
+        },
+        {
+          "stage": 2,
+          "cost": { "wood": 3, "textile": 1},
+          "effect": { "options": [{"action": "play_from_discard"}, {"end_game_extra_science_symbol": 1}], "choice_count": 1 }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Ur",
+    "start_resource": "wood",
+    "sides": {
+      "day": [
+        {
+          "stage": 1,
+          "cost": { "stone": 1, "ore": 1},
+          "effect": { "vp": 3 }
+        },
+        {
+          "stage": 2,
+          "cost": { "stone": 2, "clay": 1 },
+          "effect": { "participate_edifice_free": "any" }
+        },
+        {
+          "stage": 3,
+          "cost": { "wood": 3, "papyrus": 1 },
+          "effect": { "vp": 7 }
+        }
+      ],
+      "night": [
+        {
+          "stage": 1,
+          "cost": { "stone": 1, "glass": 1 },
+          "effect": { "participate_edifice_free": 1 }
+        },
+        {
+          "stage": 2,
+          "cost": { "ore": 2, "stone": 1},
+          "effect": { "participate_edifice_free": 2 }
+        }, 
+        {
+          "stage": 3,
+          "cost": { "clay": 2, "stone": 1, "textile": 1 },
+          "effect": { "participate_edifice_free": 3 }
+        }
+      ]
+    }
+  }
+]
