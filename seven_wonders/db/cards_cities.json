@@ -269,7 +269,7 @@
     "effect": { "vp": 2, "diplomacy": 1 }
   },
   {
-    "name": "Office des faussaires",
+    "name": "Office du faussaire",
     "age": 2,
     "color": "black",
     "cost": {
@@ -289,7 +289,7 @@
     "effect": { "coins": 4, "others_lose_coins": 3 }
   },
   {
-    "name": "Reseau cladestin",
+    "name": "Réseau clandestin",
     "age": 3,
     "color": "black",
     "cost": {
@@ -337,7 +337,7 @@
     "effect": { "coins_per_military_token": 1, "vp": 1 }
   },
   {
-    "name": "Cénopathe",
+    "name": "Cénotaphe",
     "age": 3,
     "color": "black",
     "cost": {
