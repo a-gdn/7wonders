@@ -17,6 +17,17 @@ from . import setup
 from . import scoring
 from . import resource as resource_manager
 
+# Edifice Expansion: Participation pawns per player count
+# Each entry specifies how many participation pawns are available per age
+EDIFICE_PARTICIPATION_PAWNS = {
+    3: 2,  # 3 players get 2 pawns per age
+    4: 3,  # 4 players get 3 pawns per age
+    5: 3,  # 5 players get 3 pawns per age
+    6: 4,  # 6 players get 4 pawns per age
+    7: 5,  # 7 players get 5 pawns per age
+    # Default for unspecified player counts: 3 pawns
+}
+
 class GameEnv:
     """
     7 Wonders Game Environment.
@@ -772,9 +783,20 @@ class GameEnv:
                 player.military_tokens.append(-1)
     
     def _setup_edifices(self):
-        """Setup Edifice expansion: initialize edifices, participating pawns, and debt tokens."""
-        edifice_participation_counts = {3: 2, 4: 3, 5: 3, 6: 4, 7: 5}
-        pawns_per_age = edifice_participation_counts.get(self.num_players, 3)
+        """Setup Edifice expansion: initialize edifices, participating pawns, and debt tokens.
+        
+        EDIFICE PROJECT RULES:
+        - One project per age is randomly selected from the pool
+        - Players get participation pawns based on player count (see EDIFICE_PARTICIPATION_PAWNS):
+          * 3 players: 2 pawns per age
+          * 4 players: 3 pawns per age
+          * 5 players: 3 pawns per age
+          * 6 players: 4 pawns per age
+          * 7 players: 5 pawns per age
+        - Players can participate at most once per age (only when building wonder stage)
+        """
+        # Get pawns for this player count (default to 3 if not specified)
+        pawns_per_age = EDIFICE_PARTICIPATION_PAWNS.get(self.num_players, 3)
         
         # Separate edifice cards by age and shuffle
         edifice_by_age = {1: [], 2: [], 3: []}
@@ -818,22 +840,31 @@ class GameEnv:
     def _can_participate_in_edifice(self, player: PlayerCity) -> bool:
         """
         Check if a player can participate in the current age's edifice.
-        Per rules: can participate once per age, only if pawns available.
+        
+        Per rules: Can participate ONCE per age, ONLY when building a wonder stage,
+        and ONLY if pawns remain on the card (not from box).
+        
+        NOTE: This is called from _build_wonder_stage only. Participation is tied to
+        the action \"wonder_stage_X_edifice\" in _select_cards.
+        
+        Returns:
+            True if player can still participate in current age's edifice project
         """
         if "edifice" not in self.expansions:
             return False
         
         age_idx = self.current_age + 1  # Convert 0-indexed to 1-indexed age
         
-        # Check if already participated this age
+        # Check if already participated this age (can only participate once)
         if player.participated_in_edifice.get(age_idx, False):
             return False
         
-        # Check if edifice exists and has pawns
+        # Check if edifice exists and has pawns available
         edifice = self.active_edifices.get(age_idx)
         if not edifice:
             return False
         
+        # Only allow participation if pawns remain on the card
         if self.edifice_pawns_on_card.get(age_idx, 0) > 0:
             return True
         
@@ -842,8 +873,16 @@ class GameEnv:
     def _participate_in_edifice(self, player: PlayerCity, deferred_credits: Dict[int, int] = None) -> bool:
         """
         Execute participation in current age's edifice.
+        
+        IMPORTANT: This should ONLY be called during wonder stage construction,
+        via the action \"wonder_stage_X_edifice\" in _select_cards.
+        
         Player must pay the participation cost alongside wonder stage cost.
         
+        Args:
+            player: The player participating
+            deferred_credits: Dict of deferred commercial income (if any)
+            
         Returns:
             True if participation was successful
         """
@@ -1087,7 +1126,8 @@ class GameEnv:
                 observation["edifice_state"][age] = {
                     "name": edifice.get("name") if edifice else None,
                     "pawns_on_card": self.edifice_pawns_on_card.get(age, 0),
-                    "pawns_in_box": self.edifice_pawn_box.get(age, 0)
+                    "pawns_in_box": self.edifice_pawn_box.get(age, 0),
+                    "total_remaining_pawns": self.edifice_pawns_on_card.get(age, 0) + self.edifice_pawn_box.get(age, 0)
                 }
         
         for player in self.players:
@@ -1110,6 +1150,15 @@ class GameEnv:
             # Add Edifice expansion state if enabled
             if "edifice" in self.expansions:
                 player_obs["edifice_pawns"] = dict(player.edifice_participation_pawns)
+                # Can this player still participate in the current age's edifice?
+                # (0 or 1, since they can only participate once per age)
+                current_age_idx = self.current_age + 1
+                can_still_participate = (
+                    not player.participated_in_edifice.get(current_age_idx, False) and
+                    self.active_edifices.get(current_age_idx) is not None and
+                    self.edifice_pawns_on_card.get(current_age_idx, 0) > 0
+                )
+                player_obs["can_participate_in_edifice"] = int(can_still_participate)
                 player_obs["edifice_debt_tokens"] = list(player.edifice_debt_tokens)
                 player_obs["edifice_debt_value"] = sum(player.edifice_debt_tokens)
             

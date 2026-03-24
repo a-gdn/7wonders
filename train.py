@@ -56,7 +56,7 @@ class DataProcessor:
         self.action_space_size = self.num_cards * 3
         
         self.global_dim = 2 + 6  # +6 for edifice state (2 features per age × 3 ages)
-        self.player_feat_dim = self.num_wonders + 18 + self.num_cards  # base + science + expansion features
+        self.player_feat_dim = self.num_wonders + 21 + self.num_cards  # wonder + (day/night/progress/coins + prod + sci + expansion + built_cards)
         self.private_dim = 3 * self.num_cards 
         self.input_dim = self.global_dim + (env.num_players * self.player_feat_dim) + self.private_dim
 
@@ -273,7 +273,8 @@ def main():
     opponent_models = [create_ppo_model(proc.input_dim, proc.action_space_size) for _ in range(NUM_PLAYERS - 1)]
     opponent_agents = [PPOAgent(m) for m in opponent_models]
     
-    weights_path = "ppo_7wonders_latest.keras"
+    expansions_str = "_".join(sorted(env.expansions)) if env.expansions else "no_expansions"
+    weights_path = f"latest_model_{NUM_PLAYERS}p_{expansions_str}.keras"
     if os.path.exists(weights_path):
         model.load_weights(weights_path)
         print(f"✅ Loaded existing model weights from {weights_path}! Continuing training...")
@@ -431,7 +432,7 @@ def main():
             print(f"Iter {iter_idx:3d} | Win Rate: {win_rate:5.1f}% | Score: {avg_score:4.1f} | SP_Ratio: {p_self_play:4.2f} | Entropy: {np.mean(l_e):4.2f} | Time: {time.time()-start_time:.1f}s")
         
         if iter_idx % 20 == 0 or iter_idx == ITERATIONS: 
-            model.save("ppo_7wonders_latest.keras")
+            model.save(weights_path)
 
 if __name__ == "__main__":
     main()
