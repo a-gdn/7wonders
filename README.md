@@ -5,6 +5,7 @@ A complete Python implementation of the 7 Wonders board game, designed as a Rein
 ## Features
 
 - **Complete Game Logic:** Implements the official 7 Wonders rules for 3-7 players, including simultaneous turns, resource management, wonder construction, military conflicts, and scoring.
+- **Expansions:** Includes support for the "Cities" and "Edifice" expansions.
 - **Reinforcement Learning Ready:** Provides a `GameEnv` class compatible with RL training libraries.
 - **PPO Training Scripts:** Includes scripts for training agents using self-play and against random opponents.
 - **Model Evaluation:** A script to evaluate and compare the performance of different trained models.
@@ -14,6 +15,8 @@ A complete Python implementation of the 7 Wonders board game, designed as a Rein
 ```
 .
 ├── seven_wonders/
+│   ├── __init__.py         # Package initializer
+│   ├── constants.py        # Game constants
 │   ├── environment.py      # Main GameEnv class for the 7 Wonders game
 │   ├── models.py           # Data classes for Card and WonderStage
 │   ├── player.py           # Player state definition
@@ -32,10 +35,10 @@ A complete Python implementation of the 7 Wonders board game, designed as a Rein
 
 ### Installation
 
-This project requires TensorFlow for the PPO agent.
+This project requires TensorFlow and NumPy for the PPO agent.
 
 ```bash
-pip install tensorflow
+pip install tensorflow numpy
 ```
 
 ### Basic Usage
@@ -82,7 +85,7 @@ To start the training:
 ```bash
 python train.py
 ```
-The trained model will be saved as `ppo_7wonders_latest.keras`.
+The trained model will be saved as `latest_model_{NUM_PLAYERS}p_{expansions_str}.keras` (e.g., `latest_model_4p_cities_edifice.keras`).
 
 ### Training Against Random Opponents
 
@@ -97,7 +100,7 @@ This script saves the model as `ppo_7wonders_random_only.keras`.
 ## Evaluating Models
 
 The `eval.py` script is used to compare the performance of different models. It runs a specified number of games and reports the win rates and average scores for each model. By default, it compares:
-- The self-play model (`ppo_7wonders_latest.keras`)
+- The self-play model (e.g., `latest_model_4p_cities_edifice.keras`)
 - The baseline random-trained model (`ppo_7wonders_random_only.keras`)
 - A pure random agent
 
