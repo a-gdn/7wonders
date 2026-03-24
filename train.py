@@ -22,25 +22,25 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 NUM_PLAYERS = 4
 ITERATIONS = 3000
-CURRICULUM_STEPS = 1 # Smooth transition from random to self-play
+CURRICULUM_STEPS = 1000 # Smooth transition from random to self-play
 
 GAMES_PER_UPDATE = 200  
-EPOCHS_PER_UPDATE = 4  
+EPOCHS_PER_UPDATE = 4
 BATCH_SIZE = 1024      
 
-GAMMA = 0.99           
-GAE_LAMBDA = 0.95      
-CLIP_RATIO = 0.2       
+GAMMA = 0.99 
+GAE_LAMBDA = 0.95
+CLIP_RATIO = 0.2
 
-INITIAL_LEARNING_RATE = 5e-5 
+INITIAL_LEARNING_RATE = 2e-4
 
 # Increased entropy to force exploration against harder opponents
-INITIAL_ENTROPY = 0.12       
-FINAL_ENTROPY = 0.01      
-MAX_GRAD_NORM = 0.5    
+INITIAL_ENTROPY = 0.1
+FINAL_ENTROPY = 0.01
+MAX_GRAD_NORM = 0.5
 
-POOL_UPDATE_FREQ = 100  
-MAX_POOL_SIZE = 100     
+POOL_UPDATE_FREQ = 100
+MAX_POOL_SIZE = 100
 
 # ==========================================
 #             DATA PROCESSOR
